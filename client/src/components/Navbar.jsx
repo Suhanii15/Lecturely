@@ -29,7 +29,7 @@ const scrollToAbout = () => {
             <button onClick={scrollToAbout}
              className="border-1 border-gray-700 rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition ">About</button>
             <button onClick={()=>Navigate("/login")}
-            className="bg-purple-600 text-white-500 rounded-md px-4 py-2 hover:bg-purple-500 cursor-pointer transition border-rounded">Login</button>
+            className="bg-violet-600 text-white-500 rounded-md px-4 py-2 hover:bg-violet-500 cursor-pointer transition border-rounded">Login</button>
 
         </div>
     </div>

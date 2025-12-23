@@ -47,7 +47,7 @@ const cardVariants = {
 <div className="flex-1 flex flex-col gap-2 px-2  items-center justify-center">
     <motion.h1 initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.6 }}
     className="text-gray-700 text-4xl font-bold font-weight-500">
         Turn Lecture Recordings into Clear Notes using AI
     </motion.h1>
@@ -56,7 +56,7 @@ const cardVariants = {
     </p>
     <motion.button 
             whileHover={{ scale: 1.1, z: 50 }}
-            whileTap={{ scale: 0.9 }} className="mt-8 rounded-md  bg-purple-600 text-white px-8 py-3 hover:bg-purple-500 cursor-pointer transition" >Get Started
+            whileTap={{ scale: 0.9 }} className="mt-8 rounded-md  bg-violet-600 text-white px-8 py-3 hover:bg-violet-500 cursor-pointer transition" >Get Started
 </motion.button>
 
 </div>

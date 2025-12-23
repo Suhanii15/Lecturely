@@ -16,9 +16,9 @@ const[currState, setcurrState]=useState("Sign Up")
   event.preventDefault();
   if(currState === "Sign Up" && !isDataSubmitted){
     setIsDataSubmitted(true)
-    Navigate("/")
+    Navigate("/UploadPage")
   }
-  }
+  } 
   return (
     <div className="min-h-screen flex flex-col gap-8 items-center bg-slate-50">
 <div className="flex justify-between my-0 items-center bg-white sticky top-0 z-50 max-w-7xl px-6 py-3 min-w-screen " >
@@ -29,7 +29,7 @@ const[currState, setcurrState]=useState("Sign Up")
 
         <div className="flex gap-6 items-center ">
      <button onClick={()=>Navigate("/")}
-            className="bg-purple-600 text-white-500 rounded-md px-4 py-2 hover:bg-purple-500 cursor-pointer transition border-rounded">Home</button>
+            className="bg-violet-600 text-white-500 rounded-md px-4 py-2 hover:bg-violet-500 cursor-pointer transition border-rounded">Home</button>
 
         </div>
     </div>
@@ -53,7 +53,7 @@ const[currState, setcurrState]=useState("Sign Up")
         </>
       )
       }
-<button type="submit" className="mt-8 rounded-md  bg-purple-600 text-white px-8 py-3 hover:bg-purple-500 cursor-pointer transition">
+<button type="submit" className="mt-8 rounded-md  bg-violet-600 text-white px-8 py-3 hover:bg-violet-500 cursor-pointer transition">
   { currState==="Sign Up" ? "Create Account" : "Login"}
 </button>
 <div className="flex flex-col gap-2">
@@ -61,11 +61,11 @@ const[currState, setcurrState]=useState("Sign Up")
     currState === "Sign Up" ? (
       <p className="text-sm text-gray-700">Already Have an Account? <span
       onClick={()=>{setcurrState("Login"); setIsDataSubmitted(false)}}
-      className="font-medium text-purple-500 cursor-pointer">Login Here</span></p>
+      className="font-medium text-violet-500 cursor-pointer">Login Here</span></p>
     ) : (
       <p className="text-sm text-gray-700">Create an account.<span
       onClick={()=>setcurrState("Sign Up")}
-      className="font-medium text-purple-500 cursor-pointer">Click Here</span></p>
+      className="font-medium text-violet-500 cursor-pointer">Click Here</span></p>
     )
   } 
 </div>
