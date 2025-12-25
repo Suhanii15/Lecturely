@@ -16,8 +16,9 @@ const[currState, setcurrState]=useState("Sign Up")
   event.preventDefault();
   if(currState === "Sign Up" && !isDataSubmitted){
     setIsDataSubmitted(true)
-    Navigate("/UploadPage")
+    Navigate("/Upload")
   }
+
   } 
   return (
     <div className="min-h-screen flex flex-col gap-8 items-center bg-slate-50">

@@ -3,7 +3,8 @@ import { Route, Routes } from 'react-router-dom'
 import HomePage from'./pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import UploadPage from './pages/UploadPage'
-
+import DashboardPage from './pages/DashboardPage'
+import Notes from './pages/Notes'
 
 const App = () => {
   return (
@@ -12,6 +13,8 @@ const App = () => {
     <Route path='/' element= {<HomePage  /> }/>
     <Route path='/login' element= {<LoginPage  /> }/>
     <Route path='/upload' element= {<UploadPage  /> }/>
+    <Route path='/dashboard' element= {<DashboardPage  /> }/>
+<Route path="/notes/:id" element={<Notes />} />
 
 </Routes> </div>
   )

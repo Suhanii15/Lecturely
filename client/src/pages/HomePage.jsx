@@ -4,8 +4,10 @@ import ai from "../assets/Ai.png"
 import notes from "../assets/notes.png"
 import upload from "../assets/upload.png"
 import { motion } from 'framer-motion' // Added for smooth animations
+import { useNavigate } from 'react-router-dom'
 
 const HomePage = () => {
+  const navigate=useNavigate();
 const cardVariants = {
     initial: { 
       opacity: 0, 
@@ -54,9 +56,10 @@ const cardVariants = {
     <p className="text-gray-700 text-base py-4 font-weight-100"> 
         Upload your lecture audio and get structured notes, summaries and key points in seconds
     </p>
-    <motion.button 
+    <motion.button onClick={()=>navigate("/login")}
             whileHover={{ scale: 1.1, z: 50 }}
-            whileTap={{ scale: 0.9 }} className="mt-8 rounded-md  bg-violet-600 text-white px-8 py-3 hover:bg-violet-500 cursor-pointer transition" >Get Started
+            whileTap={{ scale: 0.9 }} 
+            className="mt-8 rounded-md  bg-violet-600 text-white px-8 py-3 hover:bg-violet-500 cursor-pointer transition" >Get Started
 </motion.button>
 
 </div>
@@ -89,6 +92,7 @@ variants={cardVariants}
             whileInView="animate"
             whileHover="hover"
             viewport={{ once: true }}
+            onClick={()=>navigate("/Upload")}
  className="bg-white rounded-lg shadow-sm tecxt-center py-6 hover:shadow-lg cursor-pointer transition ">
     <img src={upload} className="h-50 w-50 mx-auto mb-4" />
     <h4 className="text-gray-800 text-md text-center font-weight-600 text-bold ">Upload Lecture</h4>
