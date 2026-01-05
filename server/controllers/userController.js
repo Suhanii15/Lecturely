@@ -1,0 +1,137 @@
+const User = require("../models/userModels");
+const bcrypt = require("bcrypt");
+const { generateToken } = require("../lib/utils");
+
+
+// ================== SIGN UP ==================
+const signUp = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.json({
+        success: false,
+        message: "User already exists",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    const token = generateToken(user._id);
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        notesPreference: user.notesPreference,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Signup failed" });
+  }
+};
+
+
+// ================== LOGIN ==================
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    const token = generateToken(user._id);
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        notesPreference: user.notesPreference,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Login failed" });
+  }
+};
+
+
+// ================== GET LOGGED IN USER ==================
+const getMe = async (req, res) => {
+  try {
+    res.json({
+      success: true,
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        notesPreference: req.user.notesPreference,
+      },
+    });
+  } catch (error) {
+    res.json({ success: false, message: "Failed to fetch user" });
+  }
+};
+
+
+// ================== UPDATE NOTES PREFERENCE ==================
+const updateNotesPreference = async (req, res) => {
+  try {
+    const { notesPreference } = req.body;
+
+    if (!["paragraph", "keypoints"].includes(notesPreference)) {
+      return res.json({
+        success: false,
+        message: "Invalid preference value",
+      });
+    }
+
+    req.user.notesPreference = notesPreference;
+    await req.user.save();
+
+    res.json({
+      success: true,
+      message: "Preference updated",
+      notesPreference: req.user.notesPreference,
+    });
+  } catch (error) {
+    res.json({ success: false, message: "Failed to update preference" });
+  }
+};
+
+module.exports={signUp, login, getMe,updateNotesPreference};

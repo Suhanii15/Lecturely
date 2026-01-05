@@ -1,6 +1,6 @@
 //we here check if the user has access to enter certain pages of site with the help of token
 //we check if the user has a token, verufy it, match with the database and allow access accordingly
-const User=require("../models/userModel")
+const User=require("../models/userModels")
 const jwt=require('jsonwebtoken');
 const protectedroute= async (req,res,next)=>{
     try{

@@ -14,10 +14,14 @@ app.use(express.json({limit : "10 mb"}));// middleware set up, here limit shows 
 app.use(express.urlencoded({ limit:"10mb", extended: true }));
 
 app.use(cors()); // ye cors ka use isliye kiya taki front end or back end ke beech me communication ho sake, basically URL connection hai dono ka
+const userRouter=require('./Routes/userRoutes');
+const lectureRouter=require('/Routes/lectureRoutes');
 
 
 //routes
 app.use("/api/status", (req,res)=> res.send("Server chal raha"));
+app.use("/api/user", userRouter);
+app.use("/api/lectures", lectureRouter);
 
 
 const PORT=process.env.PORT || 5000; // 
