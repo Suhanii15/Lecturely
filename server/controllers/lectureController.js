@@ -1,5 +1,5 @@
-const Lecture = require("../models/lectureModel");
-const cloudinary = require("cloudinary").v2;
+const Lecture = require("../models/lectureModels");
+const cloudinary = require("../lib/cloudinary")
 
 const uploadLecture = async (req, res) => {
   try {
@@ -88,8 +88,6 @@ const processLecture = async (req, res) => {
       message: "Lecture processing started",
     });
 
-    // 🔹 Async background processing
-    processLectureAsync(lecture._id);
 
   } catch (error) {
     res.json({
