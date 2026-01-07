@@ -8,11 +8,16 @@ const AuthProvider=({children})=>{
 
   // Load user from localStorage on app start
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("user"));
-    const savedToken = localStorage.getItem("token");
-    if (savedUser && savedToken) {
-      setUser(savedUser);
-      setToken(savedToken);
+    try{
+      const savedUser = JSON.parse(localStorage.getItem("user"));
+      const savedToken = localStorage.getItem("token");
+      if (savedUser && savedToken && savedUser !== "undefined") {
+        setUser(savedUser);
+        setToken(savedToken);
+      }
+    
+    } catch (error) {
+      console.error("Error loading user from localStorage:", error);
     }
   }, []);
 const loginUser = (userData, token) => {

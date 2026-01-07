@@ -1,10 +1,13 @@
 import React, { useRef, useState } from 'react'
 import upload from "../assets/upload.png"
+import { useNavigate } from 'react-router-dom';
 
 
 const Upload = () => {
     const [file,setFile]=useState(null);
       const fileInputRef = useRef(null);
+const [loading, setLoading]=useState(false);
+const navigate=useNavigate();
 
     const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -13,6 +16,49 @@ const handleBrowseClick = () => {
     fileInputRef.current.click();
   };
 
+const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+const handleUpload = async () => {
+    if (!file) return alert("Please select a file");
+
+    try {
+      setLoading(true);
+      const base64Audio = await convertToBase64(file);
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5000/api/lectures/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token,
+        },
+        body: JSON.stringify({ audio: base64Audio }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+alert(data.message);
+return;}
+const lectureId=data.lecture._id;
+await fetch(`http://localhost:5000/api/lectures/process/${lectureId}`, {
+        method: "POST",
+        headers: {token},
+      });
+    navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
 
@@ -34,6 +80,15 @@ const handleBrowseClick = () => {
         >
           Browse Files
         </button>
+{file && (
+            <button
+              onClick={handleUpload}
+              disabled={loading}
+              className="mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-500"
+            >
+              {loading ? "Uploading..." : "Upload & Continue"}
+            </button>
+          )}
 
         <p className="text-sm text-gray-400 mt-4">
           MP3, WAV, M4A • Up to 100MB

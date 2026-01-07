@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext'; // Ensure this path is correct
+import { useNavigate } from 'react-router-dom';
 
 const SettingsModal = ({ isOpen, onClose}) => {
+
+  const { logoutUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   // Local state for the editable email
   const [email, setEmail] = useState("user@example.com");
   const [noteFormat, setNoteFormat] = useState("Key Points");
   
+  const handleLogout = () => {
+    logoutUser();
+    navigate('/login'); // Redirect to login after clearing state
+  };
 
   if (!isOpen) return null;
 
@@ -74,6 +83,20 @@ const SettingsModal = ({ isOpen, onClose}) => {
             </div>
             <p className="text-[10px] text-gray-400 mt-1">This email will be used for AI summary alerts.</p>
           </div>
+
+<div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-red-600">Account</p>
+              <p className="text-xs text-gray-400">Sign out of your session</p>
+            </div>
+            <button 
+              onClick={handleLogout}
+              className="text-xs font-bold text-red-500 border border-red-200 px-4 py-2 rounded-lg hover:bg-red-50 transition cursor-pointer"
+            >
+              Logout
+            </button>
+          </div>
+
 
         </div>
 

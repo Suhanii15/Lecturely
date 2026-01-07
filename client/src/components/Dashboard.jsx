@@ -3,36 +3,52 @@ import { useEffect } from 'react';
 import {useNavigate} from 'react-router-dom'
 import LectureCard from './LectureCard';
 import { FaSearch } from "react-icons/fa";
-
+import axios from 'axios';
 
 const Dashboard = () => {
 
     const[search,setSearch]=useState("");
-    const lectures = [
-    {
-      id: 1,
-      title: "Computer Networks",
-      date: "April 24, 2024",
-      status: "Processing",
-      notes : ""
-    },
-    {
-      id: 2,
-      title: "Database Management Systems",
-      date: "April 22, 2024",
-      status: "Completed",
-      notes : "Fourth sem meajor topic"
+    const  [lectures, setLectures]=useState([]);
+    const [loading, setLoading]=useState(true);
+  const fetchLectures = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    },
-    {
-      id: 3,
-      title: "Machine Learning Basics",
-      date: "April 20, 2024",
-      status: "Completed",
-      notes : ""
+      const { data } = await axios.get(
+        "http://localhost:5000/api/lectures/",
+        {
+          headers: {
+            token,
+          },
+        }
+      );
+ if (data.success) {
+        setLectures(data.lectures);
+      }
+    } catch (error) {
+      console.error("Error fetching lectures", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+useEffect(() => {
+    fetchLectures();
 
-    },
-  ];
+    const intervel=setInterval(()=>{
+      fetchLectures();
+    }, 5000);
+
+    return()=>clearInterval(intervel);
+  }, []);
+
+  const filteredLectures = lectures.filter((lecture) =>
+    lecture.audioUrl?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (loading) {
+    return <p className="p-6">Loading lectures...</p>;
+  }
+
 
   return (
    <div className="flex flex-col">
@@ -48,11 +64,17 @@ const Dashboard = () => {
     </div>
 
 <div className="flex min-h-screen flex-col gap-1 py-2 px-2 bg-white">
-    {lectures.map((lecture)=>(
-<LectureCard key={lecture.id} lecture={lecture} />
-    ))
-}
-</div>
+        {filteredLectures.length === 0 ? (
+          <p className="text-gray-400 text-center mt-6">
+            No lectures found
+          </p>
+        ) : (
+          filteredLectures.map((lecture) => (
+            <LectureCard key={lecture._id} lecture={lecture} />
+          ))
+        )}
+      </div>
+
     </div>
   )
 }

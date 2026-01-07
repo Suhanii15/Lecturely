@@ -16,7 +16,7 @@ const[currState, setcurrState]=useState("Sign Up")
 
 const handleAuth = async () => {
     setLoading(true);
-    const url = currState === "Sign Up" ? "/api/users/signup" : "/api/users/login";
+    const url = currState === "Sign Up" ? "http://localhost:5000/api/user/signup" : "http://localhost:5000/api/user/login";
     const body = currState === "Sign Up" ? { name, email, password } : { email, password };
 
     try {
@@ -30,7 +30,7 @@ const handleAuth = async () => {
 
       if (data.success) {
         loginUser(data.userData, data.token);
-        Navigate("/dashboard"); // redirect after login/signup
+        Navigate("/upload"); // redirect after login/signup
       } else {
         alert(data.message);
 }
@@ -82,7 +82,7 @@ const handleAuth = async () => {
         
       
 <button type="submit" className="mt-8 rounded-md  bg-violet-600 text-white px-8 py-3 hover:bg-violet-500 cursor-pointer transition">
-  { loading ? "Processing.." : currState==="Sign Up" ? "Create Account" : "Login"}
+  { loading ? "processing.." : currState==="Sign Up" ? "Create Account" : "Login"}
 </button>
 <div className="flex flex-col gap-2">
   {
