@@ -93,10 +93,13 @@ const processLecture = async (req, res) => {
     processLectureJob(lecture._id);
 
   } catch (error) {
+    console.log(error.message);
+    
     res.json({
       success: false,
       message: "Failed to process lecture",
     });
+    
   }
 };
 

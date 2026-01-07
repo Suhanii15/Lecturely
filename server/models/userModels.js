@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema(
     // 🔹 User preference for notes format
     notesPreference: {
       type: String,
-      enum: ["Paragraph", "Key Points"],
-      default: "Paragraph",
+      enum: ["paragraph", "keypoints"],
+      default: "paragraph",
     },
   },
   { timestamps: true }

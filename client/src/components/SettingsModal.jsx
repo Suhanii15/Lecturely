@@ -41,13 +41,13 @@ const SettingsModal = ({ isOpen, onClose}) => {
             </label>
             <div className="flex bg-gray-100 p-1 rounded-xl">
               <button 
-                onClick={() => setNoteFormat("Paragraph")}
+                onClick={() => setNoteFormat("paragraph")}
                 className={`flex-1 py-2 text-sm font-medium rounded-lg hover: cursor-pointer transition ${noteFormat === "Paragraph" ? "bg-white shadow-sm text-violet-600" : "text-gray-500"}`}
               >
                 Paragraph
               </button>
               <button 
-                onClick={() => setNoteFormat("Key Points")}
+                onClick={() => setNoteFormat("keypoints")}
                 className={`flex-1 py-2 text-sm font-medium rounded-lg hover: cursor-pointer transition ${noteFormat === "Key Points" ? "bg-white shadow-sm text-violet-600" : "text-gray-500"}`}
               >
                 Key Points

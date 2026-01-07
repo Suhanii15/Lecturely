@@ -15,7 +15,6 @@ const processLectureJob = async (lectureId) => {
 
     // 1️⃣ Transcribe audio
     const transcript = await transcribeAudio(lecture.audioUrl);
-console.log("transcription");
     // 2️⃣ Generate notes based on user preference
     const notesContent = await generateNotes(
       transcript,
@@ -35,8 +34,10 @@ console.log("transcription");
     console.log("lecture processed successfully");
   } catch (err) {
     console.error("Lecture processing failed:", err.message);
+    if(lecture){
     lecture.status = "failed";
     await lecture.save();
+    }
   }
 };
 

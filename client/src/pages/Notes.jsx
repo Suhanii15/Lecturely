@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import logo from "../assets/Logo.png"
 import SideBar from "../components/SideBar"
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -6,30 +6,47 @@ import Dashboard from './DashboardPage';
 import jsPDF from "jspdf";
 import {AuthContext} from "../context/AuthContext"
 import {useContext} from 'react'
-
+import axios from "axios";
 
 const Notes = () => {
-  const {user} = useContext(AuthContext);
 
-
-const downloadpdf = () => {
-  const doc = new jsPDF();
-
-  doc.setFontSize(16);
-  doc.text(lecture.title, 10, 20);
-
-  doc.setFontSize(12);
-  doc.text(lecture.notes, 10, 35, { maxWidth: 180 });
-
-  doc.save(`${lecture.title}.pdf`);
-};
-
-
-const {id}=useParams();
+const {user} = useContext(AuthContext);
+const {lectureId}=useParams();
 const navigate=useNavigate();
-const location=useLocation();
+const [lecture, setLecture] = useState(null);
+const [notes, setNotes]=useState(null);
+const [loading,setLoading]=useState(true);
 
-const lecture=location.state?.lectureData;
+useEffect(()=>{
+  const fetchNotes = async ()=>{
+    try{
+      const token=localStorage.getItem("token");
+
+      const {data}=await axios.get(`http://localhost:5000/api/notes/${lectureId}`,{
+        headers:{
+          token:localStorage.getItem("token"),
+        }
+        }
+      );
+
+      if(data.success){
+        setNotes(data.notes);
+        setLecture(data.lecture);
+      }
+    }
+    catch(error){
+      console.log(error.message);
+    }
+    finally{
+      setLoading(false);
+    }
+  };
+  if(lectureId){
+  fetchNotes();
+  }
+}, [lectureId]);
+
+
 
  if (!lecture) {
     return (
@@ -42,6 +59,21 @@ const lecture=location.state?.lectureData;
     );
    }
 
+   const downloadpdf = () => {
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text(lecture?.title || "Lecture Notes", 10, 20);
+
+  doc.setFontSize(12);
+  doc.text(lecture.notes, 10, 35, { maxWidth: 180 });
+
+  doc.save(`${lecture.title || "notes"}.pdf`);
+};
+
+if(loading){
+  return <p className="p-10"> Loading Notes...</p>
+}
   return (
     <div>
         <div className="flex justify-between my-0 items-center bg-white sticky top-0 z-50 max-w-7xl px-6 py-3 min-w-screen " >
@@ -85,7 +117,7 @@ const lecture=location.state?.lectureData;
             </h3>
 
             <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-              {lecture.notes}
+              {notes.content}
                </p>
 
           </div>
