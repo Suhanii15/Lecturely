@@ -8,7 +8,7 @@ const SettingsModal = ({ isOpen, onClose}) => {
   const navigate = useNavigate();
   // Local state for the editable email
   const [email, setEmail] = useState("user@example.com");
-  const [noteFormat, setNoteFormat] = useState("Key Points");
+  const [noteFormat, setNoteFormat] = useState("paragraph");
   
   const handleLogout = () => {
     logoutUser();
