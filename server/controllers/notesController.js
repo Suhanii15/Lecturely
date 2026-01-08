@@ -41,36 +41,4 @@ const getNotesByLecture = async (req, res) => {
   }
 };
 
-const regenerateNotes = async (req, res) => {
-  try {
-    const { lectureId } = req.params;
-    const { format } = req.body; // paragraph | keypoints
-
-    const lecture = await Lecture.findOne({
-      _id: lectureId,
-      user: req.user._id,
-    });
-
-    if (!lecture || lecture.status !== "completed") {
-      return res.json({
-        success: false,
-        message: "Lecture not ready for regeneration",
-      });
-    }
-
-    // respond immediately
-    res.json({
-      success: true,
-      message: "Notes regeneration started",
-    });
-
-  } catch (error) {
-    res.json({
-      success: false,
-      message: "Failed to regenerate notes",
-    });
-  }
-};
-
-
-module.exports = { getNotesByLecture, regenerateNotes };
+module.exports={ getNotesByLecture };
