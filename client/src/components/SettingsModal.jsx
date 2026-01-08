@@ -82,19 +82,7 @@ const handleSave = async () => {
               </button>
             </div>
           </div>
-
-          {/* 2. Appearance (Dark/Light Switch) */}
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Appearance</p>
-              <p className="text-xs text-gray-400">Toggle light or dark mode</p>
-            </div>
-            <div className="flex items-center bg-gray-100 rounded-full p-1 w-24">
-              <button className="flex-1 text-xs py-1 bg-white rounded-full shadow-sm">☀️</button>
-              <button className="flex-1 text-xs py-1 text-gray-400">🌙</button>
-            </div>
-          </div>
-
+          
           {/* 3. Contact Email (Editable) */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
