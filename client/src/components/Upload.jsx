@@ -7,10 +7,16 @@ const Upload = () => {
     const [file,setFile]=useState(null);
       const fileInputRef = useRef(null);
 const [loading, setLoading]=useState(false);
+const[title, setTitle]=useState("");
 const navigate=useNavigate();
 
     const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    if (selectedFile) {
+      const nameWithoutExt = selectedFile.name.replace(/\.[^/.]+$/, "");
+      setTitle(nameWithoutExt);
+    }
+
   };
 const handleBrowseClick = () => {
     fileInputRef.current.click();
@@ -81,6 +87,15 @@ await fetch(`http://localhost:5000/api/lectures/process/${lectureId}`, {
           Browse Files
         </button>
 {file && (
+<>
+   <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Lecture title"
+                className="w-96 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-violet-500"
+              />
+
             <button
               onClick={handleUpload}
               disabled={loading}
@@ -88,6 +103,7 @@ await fetch(`http://localhost:5000/api/lectures/process/${lectureId}`, {
             >
               {loading ? "Uploading..." : "Upload & Continue"}
             </button>
+            </>
           )}
 
         <p className="text-sm text-gray-400 mt-4">

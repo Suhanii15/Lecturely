@@ -2,11 +2,13 @@ import React from 'react'
 import logo from "../assets/logo.png"
 import { useNavigate } from 'react-router-dom'
 import login from "../pages/LoginPage"
-
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 
 const Navbar = () => {
 const Navigate=useNavigate();
+const { user, logoutUser } = useContext(AuthContext);
 
 
 const scrollToAbout = () => {
@@ -28,8 +30,23 @@ const scrollToAbout = () => {
         <div className="flex gap-6 items-center ">
             <button onClick={scrollToAbout}
              className="border-1 border-gray-700 rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition ">About</button>
-            <button onClick={()=>Navigate("/login")}
-            className="bg-violet-600 text-white-500 rounded-md px-4 py-2 hover:bg-violet-500 cursor-pointer transition border-rounded">Login</button>
+            {user ? (
+              <div className="flex items-center gap-4">
+                <span className="text-gray-700">Hi, {user.name}</span>
+                <button
+                  onClick={() => {
+                    logoutUser();
+                    Navigate("/");
+                  }}
+                  className="bg-red-500 text-white rounded-md px-4 py-2 hover:bg-red-400 cursor-pointer transition"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button onClick={()=>Navigate("/login")}
+              className="bg-violet-600 text-white-500 rounded-md px-4 py-2 hover:bg-violet-500 cursor-pointer transition border-rounded">Login</button>
+            )}
 
         </div>
     </div>

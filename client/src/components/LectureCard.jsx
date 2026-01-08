@@ -4,14 +4,6 @@ import {useNavigate} from 'react-router-dom'
 const LectureCard = ({lecture}) => {
 const navigate=useNavigate();
 
-const generateTitleFromUrl = (url) => {
-    if (!url) return "Untitled Lecture";
-    // Get filename, remove extension, replace %20/_/- with spaces
-    const fileName = url.split('/').pop().split('?')[0];
-    const cleanName = fileName.replace(/\.[^/.]+$/, "").replace(/[_-]|%20/g, ' ');
-    // Capitalize first letters
-    return cleanName.replace(/\b\w/g, (char) => char.toUpperCase());
-  };
 
 const handleViewNotes = () => {
 
@@ -24,7 +16,7 @@ const handleViewNotes = () => {
     processing: "bg-yellow-100 text-yellow-700 border border-yellow-300",
     completed: "bg-green-100 text-green-700 border border-green-300",
   };
-const displayTitle = lecture.title || generateTitleFromUrl(lecture.audioUrl); 
+const displayTitle = lecture.title;
   return (
     <div className='border border-gray-200 my-5 shadow-sm bg-iwhite flex flex-row justify-between'>
         <div className="flex flex-col px-4 py-3  gap-1">

@@ -5,7 +5,7 @@ const processLectureJob = require("../services/lectureProcessor");
 
 const uploadLecture = async (req, res) => {
   try {
-    const { audio } = req.body;
+    const { audio, title } = req.body;
 
     if (!audio) {
       return res.json({
@@ -25,6 +25,7 @@ const uploadLecture = async (req, res) => {
       audioUrl: uploadResponse.secure_url,
       audioPublicId: uploadResponse.public_id,
       status: "uploaded",
+      title:title?. trim() || "untitled Lecture"
     });
 
     res.json({

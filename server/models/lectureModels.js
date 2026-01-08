@@ -18,7 +18,8 @@ const lectureSchema = new mongoose.Schema(
     },
 
     title: {
-      type: String, // generated during processing
+      type: String,
+      default: "Untitled Lecture", // generated during processing
     },
 
     status: {
