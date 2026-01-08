@@ -1,7 +1,9 @@
 const User = require("../models/userModels");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../lib/utils");
-
+const Lecture = require("../models/lectureModels");
+const { generateNotes } = require("../services/aiservices");
+const Notes=require("../models/notesModel")
 
 // ================== SIGN UP ==================
 const signUp = async (req, res) => {
@@ -129,9 +131,33 @@ const updateNotesPreference = async (req, res) => {
       message: "Preference updated",
       notesPreference: req.user.notesPreference,
     });
+const lectures = await Lecture.find({
+      user: req.user._id,
+      status: "completed",
+    });
+
+    for (const lecture of lectures) {
+      const notes = await Notes.findOne({
+        lecture: lecture._id,
+        user: req.user._id,
+      });
+      if (!notes) continue;
+
+      const regeneratedContent = await generateNotes(
+        notes.transcript || notes.content, // fallback safe
+        notesPreference
+      );
+
+      notes.content = regeneratedContent;
+      notes.format = notesPreference;
+      await notes.save();
+    }
   } catch (error) {
     res.json({ success: false, message: "Failed to update preference" });
   }
 };
+
+
+     
 
 module.exports={signUp, login, getMe,updateNotesPreference};

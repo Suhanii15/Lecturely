@@ -14,6 +14,8 @@ const AuthProvider=({children})=>{
       if (savedUser && savedToken && savedUser !== "undefined") {
         setUser(savedUser);
         setToken(savedToken);
+
+
       }
     
     } catch (error) {
@@ -23,6 +25,7 @@ const AuthProvider=({children})=>{
 const loginUser = (userData, token) => {
     setUser(userData);
     setToken(token);
+
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
   };
@@ -32,8 +35,11 @@ const loginUser = (userData, token) => {
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+
   };
 
+  
+      
     return(
     <AuthContext.Provider value={{ user, token, loginUser, logoutUser }}>
       {children}

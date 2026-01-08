@@ -58,7 +58,7 @@ const generateNotes = async (transcript, format = "paragraph") => {
   try {
     // AssemblyAI has "auto_summarize" and "auto_highlight" features
     const summaryPrompt =
-      format === "Key Points"
+      format === "keypoints"
         ? "Summarize this lecture in clear bullet points."
         : "Summarize this lecture in well-structured paragraph form.";
 

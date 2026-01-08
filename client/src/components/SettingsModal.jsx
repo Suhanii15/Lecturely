@@ -1,15 +1,43 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext'; // Ensure this path is correct
 import { useNavigate } from 'react-router-dom';
-
+import axios from "axios"
 const SettingsModal = ({ isOpen, onClose}) => {
 
-  const { logoutUser } = useContext(AuthContext);
+  const {  user, logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
   // Local state for the editable email
   const [email, setEmail] = useState("user@example.com");
   const [noteFormat, setNoteFormat] = useState("paragraph");
-  
+  const[loading, setLoading]=useState(false);
+
+  useEffect(() => {
+    if (user?.notesPreference) {
+      setNoteFormat(user.notesPreference);
+    }
+  }, [user]);
+
+const handleSave = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+
+      await axios.put(
+        "http://localhost:5000/api/user/preferences",
+        { notesPreference: noteFormat },
+        {
+          headers: { token },
+        }
+      );
+
+      onClose();
+    } catch (error) {
+      console.error("Failed to update preferences");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLogout = () => {
     logoutUser();
     navigate('/login'); // Redirect to login after clearing state
@@ -42,13 +70,13 @@ const SettingsModal = ({ isOpen, onClose}) => {
             <div className="flex bg-gray-100 p-1 rounded-xl">
               <button 
                 onClick={() => setNoteFormat("paragraph")}
-                className={`flex-1 py-2 text-sm font-medium rounded-lg hover: cursor-pointer transition ${noteFormat === "Paragraph" ? "bg-white shadow-sm text-violet-600" : "text-gray-500"}`}
+                className={`flex-1 py-2 text-sm font-medium rounded-lg hover: cursor-pointer transition ${noteFormat === "paragraph" ? "bg-white shadow-sm text-violet-600" : "text-gray-500"}`}
               >
                 Paragraph
               </button>
               <button 
                 onClick={() => setNoteFormat("keypoints")}
-                className={`flex-1 py-2 text-sm font-medium rounded-lg hover: cursor-pointer transition ${noteFormat === "Key Points" ? "bg-white shadow-sm text-violet-600" : "text-gray-500"}`}
+                className={`flex-1 py-2 text-sm font-medium rounded-lg hover: cursor-pointer transition ${noteFormat === "keypoints" ? "bg-white shadow-sm text-violet-600" : "text-gray-500"}`}
               >
                 Key Points
               </button>
@@ -103,10 +131,10 @@ const SettingsModal = ({ isOpen, onClose}) => {
         {/* Footer */}
         <div className="mt-8">
           <button 
-            onClick={onClose}
+            onClick={handleSave}
             className="w-full bg-violet-600 text-white font-bold py-3 rounded-xl hover:bg-violet-700 active:scale-[0.98] transition cursor-pointer"
           >
-            Save & Close
+            {loading ? "Saving..." : "Save & Close"}
           </button>
         </div>
       </div>

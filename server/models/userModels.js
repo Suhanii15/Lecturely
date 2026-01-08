@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema(
       enum: ["paragraph", "keypoints"],
       default: "paragraph",
     },
+    
   },
   { timestamps: true }
 );
