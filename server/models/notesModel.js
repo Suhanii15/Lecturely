@@ -19,12 +19,6 @@ const notesSchema = new mongoose.Schema(
       type: String,
       required: true, // final generated notes
     },
-
-    format: {
-      type: String,
-      enum: ["paragraph", "keypoints"],
-      default: "paragraph",
-    },
   },
   { timestamps: true }
 );

@@ -16,6 +16,9 @@ const navigate=useNavigate();
 const [lecture, setLecture] = useState(null);
 const [notes, setNotes]=useState(null);
 const [loading,setLoading]=useState(true);
+const[isEditing, setIsEditing]=useState(false);
+const[editedContent, setEditedContent]=useState("");
+const [saving, setSaving]=useState(false);
 
 useEffect(()=>{
   const fetchNotes = async ()=>{
@@ -31,6 +34,7 @@ useEffect(()=>{
 
       if(data.success){
         setNotes(data.notes);
+        setEditedContent(data.notes.content);
         setLecture(data.lecture);
       }
     }
@@ -117,6 +121,36 @@ useEffect(()=>{
     URL.revokeObjectURL(url);
   };
 
+  const saveNotes = async () => {
+  try {
+    setSaving(true);
+    const { data } = await axios.put(
+      `http://localhost:5000/api/notes/${notes._id}`,
+      { content: editedContent },
+      {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      }
+    );
+
+    if (data.success) {
+      setNotes({ ...notes, content: editedContent });
+      setEditedContent(editedContent);
+      setIsEditing(false);
+    } else {
+      console.error("Failed to save notes:", data.message);
+      alert("Failed to save notes. Please try again.");
+    }
+  } catch (error) {
+    console.error("Error saving notes:", error.message);
+    alert("Error saving notes. Please try again.");
+  } finally {
+    setSaving(false);
+  }
+};
+
+
 if(loading){
   return <p className="p-10"> Loading Notes...</p>
 }
@@ -166,13 +200,57 @@ if(loading){
           {/* NOTES CARD */}
           <div className="bg-white rounded-lg shadow-md p-6">
 
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">
-              Generated Notes
-            </h3>
+<div className="flex justify-between items-center mb-4">
+  <h3 className="text-lg font-semibold text-gray-700">
+    Generated Notes
+  </h3>
 
-            <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-              {notes.content}
-               </p>
+  {!isEditing && (
+    <button
+      onClick={() => setIsEditing(true)}
+      className="text-violet-500 hover:text-violet-700"
+      title="Edit notes"
+    >
+      ✏️
+    </button>
+  )}
+</div>
+
+
+            {isEditing ? (
+  <>
+    <textarea
+      value={editedContent}
+      onChange={(e) => setEditedContent(e.target.value)}
+      className="w-full min-h-[300px] border rounded-md p-3 text-gray-700 focus:outline-violet-500"
+    />
+
+    <div className="flex gap-3 mt-4">
+      <button
+        onClick={saveNotes}
+        disabled={saving}
+        className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold"
+      >
+        {saving ? "Saving..." : "Save"}
+      </button>
+
+      <button
+        onClick={() => {
+          setEditedContent(notes.content);
+          setIsEditing(false);
+        }}
+        className="bg-gray-200 px-4 py-2 rounded-md text-gray-700 font-semibold"
+      >
+        Cancel
+      </button>
+    </div>
+  </>
+) : (
+  <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+    {notes.content}
+  </p>
+)}
+
 
           </div>
         </div>
