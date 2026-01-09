@@ -57,6 +57,12 @@ const Dashboard = () => {
   }
 };
 
+  const handleUpdateTitle = (updatedLecture) => {
+    setLectures((prev) =>
+      prev.map((lec) => (lec._id === updatedLecture._id ? updatedLecture : lec))
+    );
+  };
+
 useEffect(() => {
     fetchLectures();
 
@@ -92,7 +98,7 @@ useEffect(() => {
           </p>
         ) : (
           filteredLectures.map((lecture) => (
-            <LectureCard key={lecture._id} lecture={lecture} onDelete={handleDeleteLecture} />
+            <LectureCard key={lecture._id} lecture={lecture} onDelete={handleDeleteLecture} onUpdate={handleUpdateTitle} />
           ))
         )}
       </div>

@@ -8,14 +8,11 @@ const SettingsModal = ({ isOpen, onClose}) => {
   const navigate = useNavigate();
   // Local state for the editable email
   const [email, setEmail] = useState("");
-  const [noteFormat, setNoteFormat] = useState("paragraph");
   const[loading, setLoading]=useState(false);
 
   useEffect(() => {
     if (user) {
-    if (user.notesPreference) {
-      setNoteFormat(user.notesPreference);
-    }
+    
     if (user.email) {
       setEmail(user.email);
     }
@@ -29,7 +26,7 @@ const handleSave = async () => {
 
       await axios.put(
         "http://localhost:5000/api/user/preferences",
-        { notesPreference: noteFormat,
+        { 
           email:email,
          },
         {
@@ -68,27 +65,6 @@ const handleSave = async () => {
         </div>
 
         <div className="space-y-6">
-          
-          {/* 1. Note Format Toggle */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Preferred Note Format
-            </label>
-            <div className="flex bg-gray-100 p-1 rounded-xl">
-              <button 
-                onClick={() => setNoteFormat("paragraph")}
-                className={`flex-1 py-2 text-sm font-medium rounded-lg hover: cursor-pointer transition ${noteFormat === "paragraph" ? "bg-white shadow-sm text-violet-600" : "text-gray-500"}`}
-              >
-                Paragraph
-              </button>
-              <button 
-                onClick={() => setNoteFormat("keypoints")}
-                className={`flex-1 py-2 text-sm font-medium rounded-lg hover: cursor-pointer transition ${noteFormat === "keypoints" ? "bg-white shadow-sm text-violet-600" : "text-gray-500"}`}
-              >
-                Key Points
-              </button>
-            </div>
-          </div>
           
           {/* 3. Contact Email (Editable) */}
           <div>

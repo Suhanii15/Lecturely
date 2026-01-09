@@ -142,5 +142,30 @@ const deleteLecture = async (req, res) => {
   }
 };
 
+// ================== UPDATE LECTURE TITLE ==================
+const updateLectureTitle = async (req, res) => {
+  try {
+    const { lectureId } = req.params;
+    const { title } = req.body;
 
-module.exports={uploadLecture,getMyLectures,processLecture, deleteLecture}
+    if (!title || !title.trim()) {
+      return res.json({ success: false, message: "Title cannot be empty" });
+    }
+
+    const lecture = await Lecture.findOne({ _id: lectureId, user: req.user._id });
+    if (!lecture) {
+      return res.json({ success: false, message: "Lecture not found" });
+    }
+
+    lecture.title = title.trim();
+    await lecture.save();
+
+    res.json({ success: true, message: "Title updated", lecture });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Failed to update title" });
+  }
+};
+
+
+module.exports={uploadLecture,getMyLectures,processLecture, deleteLecture, updateLectureTitle}

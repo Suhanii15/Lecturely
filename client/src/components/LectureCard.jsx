@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios';
 
-const LectureCard = ({lecture, onDelete}) => {
+const LectureCard = ({lecture, onDelete, onUpdate}) => {
 const navigate=useNavigate();
+const [isEditing, setIsEditing] = useState(false);
+const [editedTitle, setEditedTitle] = useState(lecture.title || '');
+const [isSaving, setIsSaving] = useState(false);
 
 
 const handleViewNotes = () => {
@@ -35,6 +39,66 @@ const displayTitle = lecture.title;
 
         </div>
         <div className="flex items-center gap-4">
+        <div className="flex items-center">
+          {isEditing ? (
+            <div className="flex items-center gap-2">
+              <input
+                value={editedTitle}
+                onChange={(e) => setEditedTitle(e.target.value)}
+                className="border border-gray-200 px-2 py-1 rounded-md"
+              />
+              <button
+                onClick={async () => {
+                  const token = localStorage.getItem('token');
+                  if (!editedTitle || !editedTitle.trim()) {
+                    alert('Title cannot be empty');
+                    return;
+                  }
+                  try {
+                    setIsSaving(true);
+                    const { data } = await axios.put(
+                      `http://localhost:5000/api/lectures/${lecture._id}/title`,
+                      { title: editedTitle.trim() },
+                      { headers: { token } }
+                    );
+                    if (data.success) {
+                      setIsEditing(false);
+                      if (onUpdate) onUpdate(data.lecture);
+                    } else {
+                      alert(data.message || 'Failed to update title');
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    alert('Failed to update title');
+                  } finally {
+                    setIsSaving(false);
+                  }
+                }}
+                className="px-2 py-1 bg-green-500 text-white rounded-md"
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving...' : '✓'}
+              </button>
+              <button
+                onClick={() => {
+                  setIsEditing(false);
+                  setEditedTitle(lecture.title || '');
+                }}
+                className="px-2 py-1 bg-gray-200 rounded-md"
+              >
+                ✕
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="text-sm text-gray-500 hover:text-gray-700 px-2"
+              title="Edit title"
+            >
+              ✎
+            </button>
+          )}
+        </div>
         <span
           className={`px-4 py-2 rounded-full text-sm ${statusStyles[lecture.status]}`}
         >

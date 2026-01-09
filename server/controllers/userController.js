@@ -123,37 +123,48 @@ const updateNotesPreference = async (req, res) => {
       });
     }
 
+    // persist preference and email
     req.user.notesPreference = notesPreference;
-    req.user.email = email;
+    if (email) req.user.email = email;
     await req.user.save();
 
+    // respond immediately
     res.json({
       success: true,
       message: "Preference updated",
       notesPreference: req.user.notesPreference,
     });
-const lectures = await Lecture.find({
-      user: req.user._id,
-      status: "completed",
-    });
 
-    for (const lecture of lectures) {
-      const notes = await Notes.findOne({
-        lecture: lecture._id,
-        user: req.user._id,
-      });
-      if (!notes) continue;
+    // regenerate notes in background (do not block response)
+    (async () => {
+      try {
+        const lectures = await Lecture.find({
+          user: req.user._id,
+          status: "completed",
+        });
 
-      const regeneratedContent = await generateNotes(
-        notes.transcript || notes.content, // fallback safe
-        notesPreference
-      );
+        for (const lecture of lectures) {
+          const notes = await Notes.findOne({
+            lecture: lecture._id,
+            user: req.user._id,
+          });
+          if (!notes) continue;
 
-      notes.content = regeneratedContent;
-      notes.format = notesPreference;
-      await notes.save();
-    }
+          const regeneratedContent = await generateNotes(
+            notes.transcript || notes.content,
+            notesPreference
+          );
+
+          notes.content = regeneratedContent;
+          notes.format = notesPreference;
+          await notes.save();
+        }
+      } catch (bgErr) {
+        console.error("Background regeneration failed:", bgErr);
+      }
+    })();
   } catch (error) {
+    console.error(error);
     res.json({ success: false, message: "Failed to update preference" });
   }
 };
