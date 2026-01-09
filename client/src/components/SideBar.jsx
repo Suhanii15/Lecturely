@@ -26,7 +26,7 @@ const SideBar = () => {
             <FaCloudUploadAlt className=" my-auto"/>
             Upload Lecture </NavLink>
              <button onClick={()=>setSettings(true)}
-              className="px-2 py-2 shadow-sm cursor-pointer w-full rounded-md flex gap-3 font-semibold hover:bg-violet-500  text-gray-700">
+              className="px-2 py-2 shadow-sm cursor-pointer w-full rounded-md flex gap-3 font-semibold hover:bg-violet-500 cursor-pointer text-gray-700">
                 <IoSettingsSharp className="my-auto" />
 
             Settings </button>
