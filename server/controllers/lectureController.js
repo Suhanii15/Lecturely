@@ -104,5 +104,43 @@ const processLecture = async (req, res) => {
   }
 };
 
+const deleteLecture = async (req, res) => {
+  try {
+    const { lectureId } = req.params;
 
-module.exports={uploadLecture,getMyLectures,processLecture}
+    const lecture = await Lecture.findOne({
+      _id: lectureId,
+      user: req.user._id,
+    });
+
+    if (!lecture) {
+      return res.json({
+        success: false,
+        message: "Lecture not found",
+      });
+    }
+
+    // optional: delete from cloudinary
+    if (lecture.audioPublicId) {
+      await cloudinary.uploader.destroy(lecture.audioPublicId, {
+        resource_type: "video",
+      });
+    }
+
+    await Lecture.deleteOne({ _id: lectureId });
+
+    res.json({
+      success: true,
+      message: "Lecture deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.json({
+      success: false,
+      message: "Failed to delete lecture",
+    });
+  }
+};
+
+
+module.exports={uploadLecture,getMyLectures,processLecture, deleteLecture}

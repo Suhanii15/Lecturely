@@ -92,7 +92,7 @@ variants={cardVariants}
             whileInView="animate"
             whileHover="hover"
             viewport={{ once: true }}
-            onClick={()=>navigate("/Upload")}
+            onClick={()=>navigate("/login")}
  className="bg-white rounded-lg shadow-sm tecxt-center py-6 hover:shadow-lg cursor-pointer transition ">
     <img src={upload} className="h-50 w-50 mx-auto mb-4" />
     <h4 className="text-gray-800 text-md text-center font-weight-600 text-bold ">Upload Lecture</h4>

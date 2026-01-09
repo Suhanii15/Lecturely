@@ -31,6 +31,32 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+
+  const handleDeleteLecture = async (lectureId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await axios.delete(
+      `http://localhost:5000/api/lectures/${lectureId}`,
+      {
+        headers: { token },
+      }
+    );
+
+    if (res.data.success) {
+      // update UI instantly
+      setLectures((prev) =>
+        prev.filter((lecture) => lecture._id !== lectureId)
+      );
+    } else {
+      alert(res.data.message);
+    }
+  } catch (error) {
+    console.error("Delete failed", error);
+    alert("Failed to delete lecture");
+  }
+};
+
 useEffect(() => {
     fetchLectures();
 
@@ -42,7 +68,7 @@ useEffect(() => {
   }, []);
 
   const filteredLectures = lectures.filter((lecture) =>
-    lecture.audioUrl?.toLowerCase().includes(search.toLowerCase())
+    lecture.title?.toLowerCase().includes(search.toLowerCase())
   );
 
   if (loading) {
@@ -57,11 +83,7 @@ useEffect(() => {
        <h1 className="text-gray-700 font-bold text-2xl px-2 py-4"> Your Lectures</h1>
     </div>
 
-    <div className=" px-2 py-2 h-14 bg-white flex  align-center">
-      <FaSearch className="flex alogn-center justify-center my-auto mx-auto h-5"/>
-<input className="mx-auto my-auto py-2 px-3 w-300 border border-gray-200 hover:border-gray-400 cursor-pointer transition "
- type="text" placeholder="Search lecture" onChange={(e)=>setSearch(e.target.value)} value={search} /> 
-    </div>
+    
 
 <div className="flex min-h-screen flex-col gap-1 py-2 px-2 bg-white">
         {filteredLectures.length === 0 ? (
@@ -70,7 +92,7 @@ useEffect(() => {
           </p>
         ) : (
           filteredLectures.map((lecture) => (
-            <LectureCard key={lecture._id} lecture={lecture} />
+            <LectureCard key={lecture._id} lecture={lecture} onDelete={handleDeleteLecture} />
           ))
         )}
       </div>
