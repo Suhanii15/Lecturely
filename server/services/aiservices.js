@@ -5,9 +5,6 @@ if(!ASSEMBLYAI_API_KEY){
   throw new Error("AssemblyAI API key is missing");
 }
 
-// ==========================
-// 1️⃣ Upload audio URL to AssemblyAI & get transcription
-// ==========================
 const transcribeAudio = async (audioUrl) => {
   try {
     // Send audio URL to AssemblyAI for transcription
@@ -51,15 +48,12 @@ const transcribeAudio = async (audioUrl) => {
   }
 };
 
-// ==========================
-// 2️⃣ Generate notes (summary or keypoints)
-// ==========================
 const generateNotes = async (transcript, format = "paragraph") => {
   try {
     // AssemblyAI has "auto_summarize" and "auto_highlight" features
     const summaryPrompt =
       format === "keypoints"
-        ? "Summarize this lecture in clear bullet points."
+        ? "Summarize this lecture in clear bullet points separate headings "
         : "Summarize this lecture in well-structured paragraph form.";
 
     // For simplicity, we can send a prompt to AssemblyAI's summary endpoint

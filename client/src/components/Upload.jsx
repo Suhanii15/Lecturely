@@ -125,7 +125,7 @@ const Upload = () => {
                 className={`w-full py-2 rounded-md text-white transition ${
                   loading
                     ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-600 hover:bg-green-500"
+                    : "bg-green-600 hover:bg-green-500 cursor-pointer"
                 }`}
               >
                 {loading ? "Uploading..." : "Upload & Continue"}

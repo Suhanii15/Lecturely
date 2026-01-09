@@ -114,7 +114,7 @@ const getMe = async (req, res) => {
 // ================== UPDATE NOTES PREFERENCE ==================
 const updateNotesPreference = async (req, res) => {
   try {
-    const { notesPreference } = req.body;
+    const { notesPreference, email } = req.body;
 
     if (!["paragraph", "keypoints"].includes(notesPreference)) {
       return res.json({
@@ -124,6 +124,7 @@ const updateNotesPreference = async (req, res) => {
     }
 
     req.user.notesPreference = notesPreference;
+    req.user.email = email;
     await req.user.save();
 
     res.json({

@@ -7,14 +7,19 @@ const SettingsModal = ({ isOpen, onClose}) => {
   const {  user, logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
   // Local state for the editable email
-  const [email, setEmail] = useState("user@example.com");
+  const [email, setEmail] = useState("");
   const [noteFormat, setNoteFormat] = useState("paragraph");
   const[loading, setLoading]=useState(false);
 
   useEffect(() => {
-    if (user?.notesPreference) {
+    if (user) {
+    if (user.notesPreference) {
       setNoteFormat(user.notesPreference);
     }
+    if (user.email) {
+      setEmail(user.email);
+    }
+  }
   }, [user]);
 
 const handleSave = async () => {
@@ -24,7 +29,9 @@ const handleSave = async () => {
 
       await axios.put(
         "http://localhost:5000/api/user/preferences",
-        { notesPreference: noteFormat },
+        { notesPreference: noteFormat,
+          email:email,
+         },
         {
           headers: { token },
         }
