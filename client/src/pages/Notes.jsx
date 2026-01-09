@@ -59,17 +59,63 @@ useEffect(()=>{
     );
    }
 
-   const downloadpdf = () => {
-  const doc = new jsPDF();
+  const downloadPdf = () => {
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    const title = lecture?.title || 'Lecture Notes';
+    const body = notes?.content || '';
 
-  doc.setFontSize(16);
-  doc.text(lecture?.title || "Lecture Notes", 10, 20);
+    doc.setFontSize(18);
+    doc.text(title, 40, 60);
 
-  doc.setFontSize(12);
-  doc.text(lecture.notes, 10, 35, { maxWidth: 180 });
+    doc.setFontSize(12);
+    const lines = doc.splitTextToSize(body, 520);
+    doc.text(lines, 40, 90);
 
-  doc.save(`${lecture.title || "notes"}.pdf`);
-};
+    doc.save(`${title.replace(/[^a-z0-9\- ]/gi, '_')}.pdf`);
+  };
+
+  const downloadMarkdown = () => {
+    const title = `# ${lecture?.title || 'Lecture Notes'}\n\n`;
+    const body = notes?.content || '';
+    const md = `${title}${body}`;
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${lecture?.title || 'notes'}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadTxt = () => {
+    const body = notes?.content || '';
+    const blob = new Blob([body], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${lecture?.title || 'notes'}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadJson = () => {
+    const payload = {
+      lecture: {
+        id: lecture._id,
+        title: lecture.title,
+        status: lecture.status,
+        createdAt: lecture.createdAt,
+      },
+      notes: notes || {},
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${lecture?.title || 'notes'}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
 if(loading){
   return <p className="p-10"> Loading Notes...</p>
@@ -106,8 +152,16 @@ if(loading){
             {lecture.status}
           </span>
 
-          <button onClick={downloadpdf}
-          className="bg-violet-500 px-4 py-2 mx-5 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">Download pdf</button>
+          <div className="flex gap-3 mb-4">
+            <button onClick={downloadPdf}
+              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">PDF</button>
+            <button onClick={downloadMarkdown}
+              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">Markdown</button>
+            <button onClick={downloadTxt}
+              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">TXT</button>
+            <button onClick={downloadJson}
+              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">JSON</button>
+          </div>
 
           {/* NOTES CARD */}
           <div className="bg-white rounded-lg shadow-md p-6">
