@@ -74,7 +74,7 @@ cd lecturely
 ### 2️⃣ Backend Setup
 
 ```bash
-cd backend
+cd server
 npm install
 npm run server
 ```
@@ -85,12 +85,15 @@ Create a `.env` file:
 MONGODB_URI=your_mongodb_uri
 JWT_SECRET=your_secret
 ASSEMBLYAI_API_KEY=optional
+CLOUDINARY_CLOUD_NAME="cloudinary_name"
+CLOUDINARY_API_KEY="your_cloudinary_api_key"
+CLOUDINARY_API_SECRET="your_cloudinary_secret"
 ```
 
 ### 3️⃣ Frontend Setup
 
 ```bash
-cd frontend
+cd client
 npm install
 npm run dev
 ```
@@ -129,4 +132,3 @@ Lecturely solves a **real student problem**: converting long lectures into usabl
 
 ---
 
-If you like this project, feel free to ⭐ the repository!
