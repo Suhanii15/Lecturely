@@ -75,7 +75,7 @@ const cardVariants = {
           </h2>
 
           <p className="text-gray-600 max-w-3xl mx-auto">
-            NoteGenie helps students convert lecture recordings into clean, structured notes
+            Lecturely helps students convert lecture recordings into clean, structured notes
             using AI — saving time and improving understanding.
           </p>
 

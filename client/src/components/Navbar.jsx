@@ -24,7 +24,7 @@ const scrollToAbout = () => {
     <div className="flex justify-between items-center bg-white sticky top-0 z-50 max-w-7xl  px-6 py-3 min-w-screen " >
         <div className="flex gap-2 items-center">
             <img src={logo} className="w-15 h-15"/>
-            <p className="text-gray-700 text-lg  font-bold">NoteGenie</p>
+            <p className="text-gray-700 text-lg  font-bold">Lecturely</p>
         </div>
 
         <div className="flex gap-6 items-center ">
