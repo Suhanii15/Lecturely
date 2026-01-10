@@ -19,6 +19,33 @@ const notesSchema = new mongoose.Schema(
       type: String,
       required: true, // final generated notes
     },
+    chapters: [
+    {
+      headline: String,
+      summary: String,
+      start: Number,
+      end: Number,
+    },
+  ],
+   entities: [
+    {
+      entity_type: String,
+      text: String,
+      start: Number,
+      end: Number,
+    },
+  ],
+
+  speakers: [
+    {
+      speaker: String,
+      text: String,
+      start: Number,
+      end: Number,
+    },
+  ],
+
+
   },
   { timestamps: true }
 );

@@ -12,6 +12,10 @@ const transcribeAudio = async (audioUrl) => {
       "https://api.assemblyai.com/v2/transcript",
       {
         audio_url: audioUrl,
+        auto_chapters:true,
+        entity_detection:true,
+        speaker_labels: true,   // Separates Professor/Student voices
+        iab_categories: true
       },
       {
         headers: { authorization: ASSEMBLYAI_API_KEY },
@@ -24,7 +28,6 @@ const transcribeAudio = async (audioUrl) => {
     let attempts=0;
     const MAX_ATTEMPTS=20;
     let completed = false;
-    let transcriptText = "";
     while (!completed && attempts < MAX_ATTEMPTS) {
       await new Promise((r) => setTimeout(r, 3000)); // wait 3s
       const statusRes = await axios.get(
@@ -35,13 +38,12 @@ const transcribeAudio = async (audioUrl) => {
       );
       if (statusRes.data.status === "completed") {
         completed = true;
-        transcriptText = statusRes.data.text;
+        return statusRes.data;
       } else if (statusRes.data.status === "error") {
         throw new Error("Transcription failed");
       }
     }
 
-    return transcriptText;
   } catch (err) {
     console.error("AssemblyAI transcription error:", err.message);
     throw err;

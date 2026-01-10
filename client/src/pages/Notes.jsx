@@ -19,6 +19,8 @@ const [loading,setLoading]=useState(true);
 const[isEditing, setIsEditing]=useState(false);
 const[editedContent, setEditedContent]=useState("");
 const [saving, setSaving]=useState(false);
+const [showFlashcards, setShowFlashcards] = useState(false);
+
 
 useEffect(()=>{
   const fetchNotes = async ()=>{
@@ -250,9 +252,40 @@ if(loading){
     {notes.content}
   </p>
 )}
+</div>
 
 
-          </div>
+
+{notes.chapters?.length > 0 && (
+            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
+                Auto Chapters
+              </h3>
+
+              {notes.chapters.map((ch, index) => (
+                <div
+                  key={index}
+                  className="mb-4 p-4 border rounded-md hover:bg-gray-50"
+                >
+                  <p className="font-semibold text-gray-800">
+                    {index + 1}. {ch.headline}
+                  </p>
+
+                  <p className="text-sm text-gray-600 mt-1">
+                    {ch.summary}
+                  </p>
+
+                  <p className="text-xs text-gray-400 mt-1">
+                    ⏱ {Math.floor(ch.start / 1000)}s –{" "}
+                    {Math.floor(ch.end / 1000)}s
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          
+
         </div>
     </div>
     </div>
