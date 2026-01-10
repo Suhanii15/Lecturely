@@ -1,6 +1,5 @@
 const Notes = require("../models/notesModel");
 const Lecture = require("../models/lectureModels");
-const { generateFlashcards } = require("../services/geminiService");
 
 
 const getNotesByLecture = async (req, res) => {
@@ -89,4 +88,54 @@ const updateNotes = async (req, res) => {
   }
 };
 
-module.exports={ getNotesByLecture, updateNotes};
+const addHighlight = async (req, res) => {
+  try {
+    const { text, startIndex, endIndex, color } = req.body;
+
+    const notes = await Notes.findOne({
+      _id: req.params.noteId,
+      user: req.user._id,
+    });
+
+    if (!notes) {
+      return res.json({ success: false, message: "Notes not found" });
+    }
+
+    notes.highlights.push({
+      text,
+      startIndex,
+      endIndex,
+      color,
+    });
+
+    await notes.save();
+
+    res.json({
+      success: true,
+      highlights: notes.highlights,
+    });
+  } catch (err) {
+    res.json({ success: false, message: "Failed to add highlight" });
+  }
+};
+const removeHighlight = async (req, res) => {
+  try {
+    const notes = await Notes.findOne({
+      _id: req.params.noteId,
+      user: req.user._id,
+    });
+
+    notes.highlights = notes.highlights.filter(
+      (h) => h._id.toString() !== req.params.highlightId
+    );
+
+    await notes.save();
+
+    res.json({ success: true, highlights: notes.highlights });
+  } catch (err) {
+    res.json({ success: false });
+  }
+};
+
+
+module.exports={ getNotesByLecture, updateNotes, addHighlight, removeHighlight};

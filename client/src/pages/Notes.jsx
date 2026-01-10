@@ -19,7 +19,6 @@ const [loading,setLoading]=useState(true);
 const[isEditing, setIsEditing]=useState(false);
 const[editedContent, setEditedContent]=useState("");
 const [saving, setSaving]=useState(false);
-const [showFlashcards, setShowFlashcards] = useState(false);
 
 
 useEffect(()=>{
@@ -38,6 +37,8 @@ useEffect(()=>{
         setNotes(data.notes);
         setEditedContent(data.notes.content);
         setLecture(data.lecture);
+          setHighlights(data.notes.highlights || []);
+
       }
     }
     catch(error){
@@ -80,18 +81,7 @@ useEffect(()=>{
     doc.save(`${title.replace(/[^a-z0-9\- ]/gi, '_')}.pdf`);
   };
 
-  const downloadMarkdown = () => {
-    const title = `# ${lecture?.title || 'Lecture Notes'}\n\n`;
-    const body = notes?.content || '';
-    const md = `${title}${body}`;
-    const blob = new Blob([md], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${lecture?.title || 'notes'}.md`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+
 
   const downloadTxt = () => {
     const body = notes?.content || '';
@@ -104,24 +94,6 @@ useEffect(()=>{
     URL.revokeObjectURL(url);
   };
 
-  const downloadJson = () => {
-    const payload = {
-      lecture: {
-        id: lecture._id,
-        title: lecture.title,
-        status: lecture.status,
-        createdAt: lecture.createdAt,
-      },
-      notes: notes || {},
-    };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${lecture?.title || 'notes'}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   const saveNotes = async () => {
   try {
@@ -152,6 +124,58 @@ useEffect(()=>{
   }
 };
 
+const handleHighlight = () => {
+  const selection = window.getSelection();
+
+  if (!selection || selection.rangeCount === 0) return;
+
+  const range = selection.getRangeAt(0);
+
+  // Prevent empty selection
+  if (range.collapsed) return;
+
+  // Ensure selection is inside notes
+  const container = document.getElementById("notes-content");
+  if (!container.contains(range.commonAncestorContainer)) return;
+
+  const mark = document.createElement("mark");
+  mark.style.backgroundColor = "#fde68a"; // yellow-300
+  mark.style.padding = "2px";
+  mark.style.borderRadius = "4px";
+
+  range.surroundContents(mark);
+  selection.removeAllRanges();
+
+  // Save updated content
+  setNotes(prev => ({
+    ...prev,
+    content: container.innerHTML
+  }));
+};
+
+      
+
+const handleRemoveHighlight = (e) => {
+  const target = e.target;
+
+  // Only act if clicking on highlighted text
+  if (target.tagName !== "MARK") return;
+
+  const parent = target.parentNode;
+  const textNode = document.createTextNode(target.innerText);
+
+  parent.replaceChild(textNode, target);
+
+  // Merge adjacent text nodes (important!)
+  parent.normalize();
+
+  // Save updated content
+  const container = document.getElementById("notes-content");
+  setNotes(prev => ({
+    ...prev,
+    content: container.innerHTML
+  }));
+};
 
 if(loading){
   return <p className="p-10"> Loading Notes...</p>
@@ -189,18 +213,27 @@ if(loading){
           </span>
 
           <div className="flex gap-3 mb-4">
-            <button onClick={downloadPdf}
-              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">PDF</button>
-            <button onClick={downloadMarkdown}
-              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">Markdown</button>
-            <button onClick={downloadTxt}
-              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">TXT</button>
-            <button onClick={downloadJson}
-              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:shadow-md cursor-pointer transition">JSON</button>
+            <button  title="download in pdf format"
+             onClick={downloadPdf}
+              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:bg-violet-700 shadow-md cursor-pointer transition">PDF</button>
+            <button title="download in txt format"
+             onClick={downloadTxt}
+              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:bg-violet-700 shadow-md cursor-pointer transition">TXT</button>
           </div>
 
           {/* NOTES CARD */}
           <div className="bg-white rounded-lg shadow-md p-6">
+<div className="flex gap-2 mb-3">
+  <button
+    onClick={() => handleHighlight("yellow")}
+    className="px-3 py-1 bg-yellow-300 rounded text-sm hover:bg-yellow-400 cursor-pointer  transition"
+    title="Select text to highlight and click to remove!"
+  >
+    Highlight
+  </button>
+
+
+</div>
 
 <div className="flex justify-between items-center mb-4">
   <h3 className="text-lg font-semibold text-gray-700">
@@ -248,9 +281,15 @@ if(loading){
     </div>
   </>
 ) : (
-  <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-    {notes.content}
-  </p>
+ <div
+  id="notes-content"
+  className="text-gray-600 leading-relaxed whitespace-pre-line cursor-text"
+  onMouseUp={handleHighlight}
+  onClick={handleRemoveHighlight}
+  dangerouslySetInnerHTML={{ __html: notes.content }}
+/>
+
+
 )}
 </div>
 

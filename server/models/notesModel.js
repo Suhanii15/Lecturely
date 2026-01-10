@@ -1,4 +1,17 @@
 const mongoose = require("mongoose");
+const highlightSchema = new mongoose.Schema({
+  text: String,
+  color: {
+    type: String,
+    default: "yellow",
+  },
+  startIndex: Number,
+  endIndex: Number,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 const notesSchema = new mongoose.Schema(
   {
@@ -45,6 +58,7 @@ const notesSchema = new mongoose.Schema(
     },
   ],
 
+  highlights: [highlightSchema], 
 
   },
   { timestamps: true }

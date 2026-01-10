@@ -74,7 +74,7 @@ const displayTitle = lecture.title;
                     setIsSaving(false);
                   }
                 }}
-                className="px-2 py-1 bg-green-500 text-white rounded-md"
+                className="px-2 py-1 bg-green-500 text-white rounded-md hover:cursor-pointer  transition"
                 disabled={isSaving}
               >
                 {isSaving ? 'Saving...' : '✓'}
@@ -84,7 +84,7 @@ const displayTitle = lecture.title;
                   setIsEditing(false);
                   setEditedTitle(lecture.title || '');
                 }}
-                className="px-2 py-1 bg-gray-200 rounded-md"
+                className="px-2 py-1 bg-gray-200 rounded-md hover:cursor-pointer  transition"
               >
                 ✕
               </button>
@@ -92,7 +92,7 @@ const displayTitle = lecture.title;
           ) : (
             <button
               onClick={() => setIsEditing(true)}
-              className="text-sm text-gray-500 hover:text-gray-700 px-2"
+              className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer px-2"
               title="Edit title"
             >
               ✎
