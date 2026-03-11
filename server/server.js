@@ -10,7 +10,7 @@ const connectDB=require('./lib/db');
 
 connectDB(); // database connect karne ke liye function call kiya
 
-app.use(express.json({limit : "10 mb"}));// middleware set up, here limit shows ki itni sie ki image daal sakte hai
+app.use(express.json({limit : "100 mb"}));// middleware set up, here limit shows ki itni sie ki image daal sakte hai
 app.use(express.urlencoded({ limit:"10mb", extended: true }));
 
 app.use(cors()); // ye cors ka use isliye kiya taki front end or back end ke beech me communication ho sake, basically URL connection hai dono ka
