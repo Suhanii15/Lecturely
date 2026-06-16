@@ -12,6 +12,13 @@ connectDB(); // database connect karne ke liye function call kiya
 app.use(express.json({ limit: "1gb" }));// middleware set up, here limit shows ki itni sie ki image daal sakte hai
 app.use(express.urlencoded({ limit:"1gb", extended: true }));
 
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 app.use(cors()); // ye cors ka use isliye kiya taki front end or back end ke beech me communication ho sake, basically URL connection hai dono ka
 const userRouter=require('./Routes/userRoutes');
 const lectureRouter=require('./Routes/lectureRoutes');
