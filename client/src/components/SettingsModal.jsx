@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
+import api from "../api";
 import { FaTimes, FaEnvelope, FaBookOpen, FaSignOutAlt, FaSave } from "react-icons/fa";
 
 const SettingsModal = ({ isOpen, onClose }) => {
@@ -22,7 +22,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      await axios.put("/api/user/preferences", { email, notesPreference }, { headers: { token } });
+      await api.put("/api/user/preferences", { email, notesPreference }, { headers: { token } });
       onClose();
     } catch (error) {
       console.error("Failed to update preferences");

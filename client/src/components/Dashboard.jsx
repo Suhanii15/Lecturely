@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import LectureCard from './LectureCard';
-import axios from 'axios';
+import api from "../api";
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
 import { FaMicrophone, FaCheckCircle, FaSpinner, FaPlus, FaSearch } from "react-icons/fa";
@@ -26,7 +26,7 @@ const Dashboard = () => {
   const fetchLectures = async () => {
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get("/api/lectures/", { headers: { token } });
+      const { data } = await api.get("/api/lectures/", { headers: { token } });
       if (data.success) setLectures(data.lectures);
     } catch (error) {
       console.error("Error fetching lectures", error);
@@ -38,7 +38,7 @@ const Dashboard = () => {
   const handleDeleteLecture = async (lectureId) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.delete(`/api/lectures/${lectureId}`, { headers: { token } });
+      const res = await api.delete(`/api/lectures/${lectureId}`, { headers: { token } });
       if (res.data.success) {
         setLectures((prev) => prev.filter((lecture) => lecture._id !== lectureId));
       } else {

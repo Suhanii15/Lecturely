@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from "../api";
 import { motion } from 'framer-motion'
 import { FaMicrophone, FaFileAlt, FaCheckCircle, FaClock, FaSpinner, FaArrowRight, FaTrashAlt, FaEdit, FaCheck, FaTimes } from "react-icons/fa"
 
@@ -26,7 +26,7 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
     }
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.put(
+      const { data } = await api.put(
         `/api/lectures/${lecture._id}`,
         { title: newTitle.trim() },
         { headers: { token } }

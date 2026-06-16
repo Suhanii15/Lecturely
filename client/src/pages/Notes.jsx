@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from "../api";
 import { motion } from 'framer-motion';
 import {
   FaArrowLeft, FaFileAlt, FaRegClock, FaSpinner, FaInfoCircle, FaMicrophone,
@@ -47,7 +47,7 @@ const Notes = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const { data } = await axios.get(`/api/notes/${lectureId}`, { headers: { token } });
+        const { data } = await api.get(`/api/notes/${lectureId}`, { headers: { token } });
         if (data.success) {
           setLecture(data.lecture);
           setNotes(data.notes);
@@ -98,7 +98,7 @@ const Notes = () => {
     if (!selRange) return;
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.post(`/api/notes/${notes._id}/highlight`, {
+      const { data } = await api.post(`/api/notes/${notes._id}/highlight`, {
         text: selRange.text, startIndex: selRange.start, endIndex: selRange.end, color: '#fef08a',
       }, { headers: { token } });
       if (data.success) setNotes(prev => ({ ...prev, highlights: data.highlights }));
@@ -111,7 +111,7 @@ const Notes = () => {
   const removeHighlight = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.delete(`/api/notes/${notes._id}/highlight/${id}`, { headers: { token } });
+      const { data } = await api.delete(`/api/notes/${notes._id}/highlight/${id}`, { headers: { token } });
       if (data.success) setNotes(prev => ({ ...prev, highlights: data.highlights }));
     } catch (err) { console.error(err); }
     setClickHL(null);
@@ -126,7 +126,7 @@ const Notes = () => {
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.put(`/api/notes/${notes._id}`, { content: editContent }, { headers: { token } });
+      const { data } = await api.put(`/api/notes/${notes._id}`, { content: editContent }, { headers: { token } });
       if (data.success) {
         setNotes(data.notes);
         setIsEditing(false);
