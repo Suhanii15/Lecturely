@@ -72,7 +72,7 @@ const Upload = () => {
       if (!data.success && data.message && data.message.includes("No audio")) {
         setUploadProgress(40);
         const base64Audio = await convertToBase64(file);
-        res = await fetch("/api/lectures/upload", {
+        res = await fetch(`${import.meta.env.VITE_API_URL}/api/lectures/upload`, {
           method: "POST",
           headers: { "Content-Type": "application/json", token },
           body: JSON.stringify({ audio: base64Audio, title }),
@@ -86,7 +86,7 @@ const Upload = () => {
       const lectureId = data.lecture._id;
       setUploadProgress(85);
 
-      const processRes = await fetch(`/api/lectures/process/${lectureId}`, {
+      const processRes = await fetch(`${import.meta.env.VITE_API_URL}/api/lectures/process/${lectureId}`, {
         method: "POST",
         headers: { token },
       });

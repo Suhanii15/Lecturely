@@ -27,7 +27,7 @@ const AuthProvider=({children})=>{
     if (!token) return;
     const fetchMe = async () => {
       try {
-        const res = await fetch("/api/user/me", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/me`, {
           headers: { token }
         });
         const data = await res.json();

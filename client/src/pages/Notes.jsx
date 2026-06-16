@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from "../api";
 import { motion } from 'framer-motion';
 import {
   FaArrowLeft, FaFileAlt, FaRegClock, FaSpinner, FaInfoCircle, FaMicrophone,
   FaLightbulb, FaListUl, FaQuoteRight, FaUser, FaBookOpen,
   FaFilePdf, FaFileDownload, FaEdit, FaSave, FaTimes, FaHighlighter,
 } from 'react-icons/fa';
+import api from '../api';
 import logo from "../assets/Logo.png";
 
 const buildSegments = (text, highlights) => {
@@ -78,9 +78,22 @@ const Notes = () => {
     return { start, end, text };
   }, []);
 
+  useEffect(() => {
+    const dismiss = (e) => {
+      if (contentRef.current && !contentRef.current.contains(e.target)) {
+        setShowHLBar(false);
+        setSelRange(null);
+        setClickHL(null);
+      }
+    };
+    document.addEventListener('mousedown', dismiss);
+    return () => document.removeEventListener('mousedown', dismiss);
+  }, []);
+
   const handleMouseUp = useCallback((e) => {
+    if (e.target.closest('[data-highlight-id]')) return;
     setClickHL(null);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       const offset = getSelOffset();
       if (offset) {
         const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
@@ -91,7 +104,7 @@ const Notes = () => {
         setShowHLBar(false);
         setSelRange(null);
       }
-    }, 10);
+    });
   }, [getSelOffset]);
 
   const addHighlight = async () => {
@@ -379,9 +392,9 @@ const Notes = () => {
                       className="text-sm text-surface-700 leading-relaxed whitespace-pre-wrap break-words select-text">
                       {segments.map((seg, i) =>
                         seg.highlighted ? (
-                          <span key={i} id={`hl-${seg.id}`}
-                            onClick={(e) => { e.stopPropagation(); setClickHL({ id: seg.id }); setClickHLPos({ x: e.clientX, y: e.clientY }); }}
-                            className="cursor-pointer rounded-sm transition-colors relative group"
+                          <span key={i} data-highlight-id={seg.id}
+                            onMouseDown={(e) => { e.stopPropagation(); setClickHL({ id: seg.id }); setClickHLPos({ x: e.clientX, y: e.clientY }); }}
+                            className="cursor-pointer rounded-sm transition-colors"
                             style={{ backgroundColor: seg.color }}>
                             {seg.text}
                           </span>
