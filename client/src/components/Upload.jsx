@@ -6,6 +6,7 @@ const Upload = () => {
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -24,6 +25,37 @@ const Upload = () => {
     fileInputRef.current.click();
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(true);
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
+      const nameWithoutExt = droppedFile.name.replace(/\.[^/.]+$/, "");
+      setTitle(nameWithoutExt);
+    }
+  };
+
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -35,40 +67,52 @@ const Upload = () => {
 
   const handleUpload = async () => {
     if (!file || !title) {
-      return alert("Please select file and enter title");
+      return alert("Please select a file and enter a title");
     }
 
     try {
       setLoading(true);
-      const base64Audio = await convertToBase64(file);
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5000/api/lectures/upload", {
+      // Try FormData upload first (requires server with multer)
+      const formData = new FormData();
+      formData.append("audio", file);
+      formData.append("title", title);
+
+      let res = await fetch("/api/lectures/upload", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          token,
-        },
-        body: JSON.stringify({
-          audio: base64Audio,
-          title, // 🔑 send title
-        }),
+        headers: { token },
+        body: formData,
       });
 
-      const data = await res.json();
-      if (!data.success) return alert(data.message);
+      let data = await res.json();
+
+      // If FormData fails (e.g. proxy issue), fall back to base64
+      if (!data.success && data.message && data.message.includes("No audio")) {
+        const base64Audio = await convertToBase64(file);
+        res = await fetch("/api/lectures/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", token },
+          body: JSON.stringify({ audio: base64Audio, title }),
+        });
+        data = await res.json();
+      }
+
+      if (!data.success) return alert(data.message || "Upload failed");
 
       const lectureId = data.lecture._id;
 
-      await fetch(`http://localhost:5000/api/lectures/process/${lectureId}`, {
+      const processRes = await fetch(`/api/lectures/process/${lectureId}`, {
         method: "POST",
         headers: { token },
       });
+      const processData = await processRes.json();
+      if (!processData.success) return alert(processData.message);
 
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      alert("Upload failed");
+      alert("Upload failed: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -80,9 +124,16 @@ const Upload = () => {
         Upload Lecture
       </h1>
 
-      <div className=" mx-50 h w-5xl bg-white w-full  rounded-xl shadow-md p-8">
-        <div className="border-2 border-dashed border-violet-500 rounded-xl flex flex-col items-center p-8 gap-4">
-
+      <div className="mx-50 w-5xl bg-white w-full rounded-xl shadow-md p-8">
+        <div
+          onDragOver={handleDragOver}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          className={`border-2 border-dashed rounded-xl flex flex-col items-center p-8 gap-4 transition-colors ${
+            dragOver ? "border-green-500 bg-green-50" : "border-violet-500"
+          }`}
+        >
           <input
             ref={fileInputRef}
             type="file"
@@ -94,7 +145,9 @@ const Upload = () => {
           <img src={upload} alt="upload" className="h-32" />
 
           <p className="text-gray-600 text-sm">
-            Upload your lecture audio
+            {dragOver
+              ? "Drop your file here"
+              : "Drag & drop your lecture audio, or click to browse"}
           </p>
 
           <button
@@ -106,9 +159,12 @@ const Upload = () => {
           </button>
 
           {file && (
-            <div className=" mt-4 space-y-3">
+            <div className="mt-4 space-y-3 w-full max-w-md">
               <p className="text-sm text-gray-500 text-center">
                 Selected: <span className="font-medium">{file.name}</span>
+                <span className="ml-2 text-xs text-gray-400">
+                  ({(file.size / (1024 * 1024)).toFixed(1)} MB)
+                </span>
               </p>
 
               <input
@@ -134,7 +190,7 @@ const Upload = () => {
           )}
 
           <p className="text-xs text-gray-400 mt-4">
-            MP3, WAV, M4A • Up to 100MB
+            MP3, WAV, M4A • Up to 1GB (5+ hours of lecture)
           </p>
         </div>
       </div>

@@ -150,8 +150,8 @@ const updateNotesPreference = async (req, res) => {
           });
           if (!notes) continue;
 
-          const regeneratedContent = await generateNotes(
-            notes.transcript || notes.content,
+          const regeneratedContent = generateNotes(
+            { chapters: notes.chapters || [], text: notes.content || "" },
             notesPreference
           );
 

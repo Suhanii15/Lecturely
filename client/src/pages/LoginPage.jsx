@@ -16,7 +16,7 @@ const[currState, setcurrState]=useState("Sign Up")
 
 const handleAuth = async () => {
     setLoading(true);
-    const url = currState === "Sign Up" ? "http://localhost:5000/api/user/signup" : "http://localhost:5000/api/user/login";
+    const url = currState === "Sign Up" ? "/api/user/signup" : "/api/user/login";
     const body = currState === "Sign Up" ? { name, email, password } : { email, password };
 
     try {
@@ -29,7 +29,7 @@ const handleAuth = async () => {
       const data = await res.json();
 
       if (data.success) {
-        loginUser(data.userData, data.token);
+        loginUser(data.user, data.token);
         Navigate("/upload"); // redirect after login/signup
       } else {
         alert(data.message);

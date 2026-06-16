@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import logo from "../assets/Logo.png"
 import SideBar from "../components/SideBar"
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import Dashboard from './DashboardPage';
+import { useNavigate, useParams } from 'react-router-dom';
 import jsPDF from "jspdf";
 import {AuthContext} from "../context/AuthContext"
 import {useContext} from 'react'
@@ -19,6 +18,7 @@ const [loading,setLoading]=useState(true);
 const[isEditing, setIsEditing]=useState(false);
 const[editedContent, setEditedContent]=useState("");
 const [saving, setSaving]=useState(false);
+const [highlights, setHighlights] = useState([]);
 
 
 useEffect(()=>{
@@ -26,10 +26,8 @@ useEffect(()=>{
     try{
       const token=localStorage.getItem("token");
 
-      const {data}=await axios.get(`http://localhost:5000/api/notes/${lectureId}`,{
-        headers:{
-          token:localStorage.getItem("token"),
-        }
+      const {data}=await axios.get(`/api/notes/${lectureId}`,{
+        headers:{token}
         }
       );
 
@@ -55,7 +53,11 @@ useEffect(()=>{
 
 
 
- if (!lecture) {
+ if (loading) {
+    return <div className="p-20 text-center"><p className="text-gray-500">Loading notes...</p></div>;
+  }
+
+  if (!lecture) {
     return (
       <div className="p-20 text-center">
         <h2 className="text-xl">No data found for this lecture.</h2>
@@ -99,7 +101,7 @@ useEffect(()=>{
   try {
     setSaving(true);
     const { data } = await axios.put(
-      `http://localhost:5000/api/notes/${notes._id}`,
+      `/api/notes/${notes._id}`,
       { content: editedContent },
       {
         headers: {
@@ -146,11 +148,9 @@ const handleHighlight = () => {
   range.surroundContents(mark);
   selection.removeAllRanges();
 
-  // Save updated content
-  setNotes(prev => ({
-    ...prev,
-    content: container.innerHTML
-  }));
+  const newContent = container.innerHTML;
+  setNotes(prev => ({ ...prev, content: newContent }));
+  setEditedContent(newContent);
 };
 
       
@@ -169,17 +169,12 @@ const handleRemoveHighlight = (e) => {
   // Merge adjacent text nodes (important!)
   parent.normalize();
 
-  // Save updated content
   const container = document.getElementById("notes-content");
-  setNotes(prev => ({
-    ...prev,
-    content: container.innerHTML
-  }));
+  const newContent = container.innerHTML;
+  setNotes(prev => ({ ...prev, content: newContent }));
+  setEditedContent(newContent);
 };
 
-if(loading){
-  return <p className="p-10"> Loading Notes...</p>
-}
   return (
     <div>
         <div className="flex justify-between my-0 items-center bg-white sticky top-0 z-50 max-w-7xl px-6 py-3 min-w-screen " >
@@ -242,7 +237,11 @@ if(loading){
 
   {!isEditing && (
     <button
-      onClick={() => setIsEditing(true)}
+      onClick={() => {
+        const plain = notes.content.replace(/<[^>]*>/g, '');
+        setEditedContent(plain);
+        setIsEditing(true);
+      }}
       className="text-violet-500 hover:text-violet-700"
       title="Edit notes"
     >

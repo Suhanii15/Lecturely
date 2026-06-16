@@ -8,13 +8,16 @@ const SettingsModal = ({ isOpen, onClose}) => {
   const navigate = useNavigate();
   // Local state for the editable email
   const [email, setEmail] = useState("");
+  const [notesPreference, setNotesPreference] = useState("paragraph");
   const[loading, setLoading]=useState(false);
 
   useEffect(() => {
     if (user) {
-    
     if (user.email) {
       setEmail(user.email);
+    }
+    if (user.notesPreference) {
+      setNotesPreference(user.notesPreference);
     }
   }
   }, [user]);
@@ -25,9 +28,10 @@ const handleSave = async () => {
       const token = localStorage.getItem("token");
 
       await axios.put(
-        "http://localhost:5000/api/user/preferences",
+        "/api/user/preferences",
         { 
-          email:email,
+          email,
+          notesPreference,
          },
         {
           headers: { token },
@@ -83,7 +87,37 @@ const handleSave = async () => {
             <p className="text-[10px] text-gray-400 mt-1">This email will be used for AI summary alerts.</p>
           </div>
 
-<div className="flex items-center justify-between">
+<div className="space-y-4">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Notes Format
+            </label>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="notesPreference"
+                  value="paragraph"
+                  checked={notesPreference === "paragraph"}
+                  onChange={(e) => setNotesPreference(e.target.value)}
+                  className="accent-violet-500"
+                />
+                <span className="text-sm text-gray-600">Paragraph</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="notesPreference"
+                  value="keypoints"
+                  checked={notesPreference === "keypoints"}
+                  onChange={(e) => setNotesPreference(e.target.value)}
+                  className="accent-violet-500"
+                />
+                <span className="text-sm text-gray-600">Key Points</span>
+              </label>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold text-red-600">Account</p>
               <p className="text-xs text-gray-400">Sign out of your session</p>

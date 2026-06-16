@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import {useNavigate} from 'react-router-dom'
 import LectureCard from './LectureCard';
-import { FaSearch } from "react-icons/fa";
 import axios from 'axios';
 
 const Dashboard = () => {
@@ -15,7 +14,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
 
       const { data } = await axios.get(
-        "http://localhost:5000/api/lectures/",
+        "/api/lectures/",
         {
           headers: {
             token,
@@ -37,7 +36,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
 
     const res = await axios.delete(
-      `http://localhost:5000/api/lectures/${lectureId}`,
+      `/api/lectures/${lectureId}`,
       {
         headers: { token },
       }
@@ -66,11 +65,11 @@ const Dashboard = () => {
 useEffect(() => {
     fetchLectures();
 
-    const intervel=setInterval(()=>{
+    const interval=setInterval(()=>{
       fetchLectures();
     }, 5000);
 
-    return()=>clearInterval(intervel);
+    return()=>clearInterval(interval);
   }, []);
 
   const filteredLectures = lectures.filter((lecture) =>

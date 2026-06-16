@@ -5,24 +5,29 @@ const { transcribeAudio, generateNotes } = require("./aiservices");
 
 const processLectureJob = async (lectureId) => {
   let lecture;
-  let flashcards;
   try {
      lecture = await Lecture.findById(lectureId).populate("user");
 
     if (!lecture) return;
 
     lecture.status = "processing";
+    lecture.progressMessage = "Transcribing audio...";
     await lecture.save();
+    console.log(`[processLecture ${lectureId}] transcribing...`);
 
-    // 1️⃣ Transcribe audio
     const transcript = await transcribeAudio(lecture.audioUrl);
-    // 2️⃣ Generate notes based on user preference
+
+    lecture.progressMessage = "Generating notes...";
+    await lecture.save();
+    console.log(`[processLecture ${lectureId}] generating notes...`);
     const notesContent = await generateNotes(
-      transcript.text,
+      transcript,
       lecture.user.notesPreference
     );
 
-    // 3️⃣ Save notes
+    lecture.progressMessage = "Saving notes...";
+    await lecture.save();
+    console.log(`[processLecture ${lectureId}] saving notes...`);
     await Notes.create({
       lecture: lecture._id,
       user: lecture.user._id,

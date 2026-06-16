@@ -27,6 +27,11 @@ const lectureSchema = new mongoose.Schema(
       enum: ["uploaded", "processing", "completed", "failed"],
       default: "uploaded",
     },
+
+    progressMessage: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
