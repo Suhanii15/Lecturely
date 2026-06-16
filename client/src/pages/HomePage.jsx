@@ -5,6 +5,8 @@ import notes from "../assets/notes.png"
 import upload from "../assets/upload.png"
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 import { FaMicrophone, FaBrain, FaStickyNote, FaArrowRight, FaStar, FaShieldAlt, FaBolt } from 'react-icons/fa'
 
 const fadeUp = {
@@ -17,6 +19,8 @@ const fadeUp = {
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const go = () => navigate(user ? "/dashboard" : "/login");
 
   return (
     <>
@@ -54,7 +58,7 @@ const HomePage = () => {
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              onClick={() => navigate("/login")}
+              onClick={go}
               className="mt-8 bg-brand-600 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-brand-700 transition-colors shadow-xl shadow-brand-500/25 cursor-pointer text-base inline-flex items-center gap-2"
             >
               Get Started Free
@@ -106,7 +110,7 @@ const HomePage = () => {
                 whileInView="animate"
                 viewport={{ once: true }}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                onClick={() => navigate("/login")}
+                onClick={go}
                 className="bg-surface-100 rounded-2xl border border-surface-200 p-8 text-center shadow-sm hover:shadow-xl hover:shadow-brand-500/5 hover:border-brand-200/50 transition-all duration-300 cursor-pointer group"
               >
                 <div className="w-16 h-16 mx-auto mb-5 rounded-xl bg-brand-50 flex items-center justify-center group-hover:bg-brand-100 group-hover:scale-105 transition-all duration-300">
@@ -162,7 +166,7 @@ const HomePage = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => navigate("/login")}
+                onClick={go}
                 className="bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-xl hover:bg-brand-700 transition-colors shadow-md shadow-brand-500/20 cursor-pointer text-sm inline-flex items-center gap-2"
               >
                 Get Started Free

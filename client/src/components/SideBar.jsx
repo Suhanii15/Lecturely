@@ -31,19 +31,6 @@ const SideBar = () => {
         <span className="text-lg font-bold text-surface-800 tracking-tight">Lecturely</span>
       </div>
 
-      {/* User */}
-      {user && (
-        <div className="flex items-center gap-3 px-3 pb-5 mb-4 border-b border-surface-100">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-sm font-bold shadow-sm shrink-0">
-            {user.name?.[0] || 'U'}
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-surface-800 truncate">{user.name}</p>
-            <p className="text-xs text-surface-400 truncate">{user.email || ''}</p>
-          </div>
-        </div>
-      )}
-
       {/* Nav */}
       <NavLink to="/dashboard" className={linkClass} end>
         <MdSpaceDashboard className={iconClass} />
@@ -62,15 +49,28 @@ const SideBar = () => {
         Settings
       </button>
 
-      {/* Spacer + Sign out */}
-      <div className="mt-auto pt-4 border-t border-surface-100">
-        <button
+      {/* Spacer + User + Sign out */}
+      <div className="mt-auto">
+        {user && (
+          <div className="flex items-center gap-3 px-3 pb-4 mb-4 border-b border-surface-100">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-sm font-bold shadow-sm shrink-0">
+              {user.name?.[0] || 'U'}
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-surface-800 truncate">{user.name}</p>
+              <p className="text-xs text-surface-400 truncate">{user.email || ''}</p>
+            </div>
+          </div>
+        )}
+        <div className="pt-4 border-t border-surface-100">
+          <button
           onClick={() => { logoutUser(); navigate("/login"); }}
           className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all duration-200 w-full text-left cursor-pointer"
         >
           <IoLogOutOutline className="text-lg" />
           Sign Out
         </button>
+        </div>
       </div>
 
       <SettingsModal isOpen={settings} onClose={() => setSettings(false)} />
