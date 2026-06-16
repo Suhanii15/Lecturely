@@ -3,132 +3,182 @@ import Navbar from '../components/Navbar'
 import ai from "../assets/Ai.png"
 import notes from "../assets/notes.png"
 import upload from "../assets/upload.png"
-import { motion } from 'framer-motion' // Added for smooth animations
+import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import { FaMicrophone, FaBrain, FaStickyNote, FaArrowRight, FaStar, FaShieldAlt, FaBolt } from 'react-icons/fa'
+
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  animate: (i) => ({
+    opacity: 1, y: 0,
+    transition: { delay: 0.08 * i, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
+  })
+};
 
 const HomePage = () => {
-  const navigate=useNavigate();
-const cardVariants = {
-    initial: { 
-      opacity: 0, 
-      scale: 0.9, 
-      z: 0 
-    },
-    animate: { 
-      opacity: 1, 
-      scale: 1,
-      // Continuous floating effect
-      y: [0, -10, 0],
-      transition: {
-        y: {
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }
-      }
-    },
-    hover: { 
-      scale: 1.1, // Move toward user
-      rotateX: 10, // Tilt backward slightly for 3D perspective
-      rotateY: -5,
-      z: 100, // Move forward in 3D space
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 20
-      }
-    }
-  };
-
- 
+  const navigate = useNavigate();
 
   return (
     <>
-    <section className="h-[calc(100vh-64px)] min-w-screen flex flex-col bg-slate">
- <Navbar/>
-<div className="flex-1 flex flex-col gap-2 px-2  items-center justify-center">
-    <motion.h1 initial={{ opacity: 0, y: 20 }}
+      {/* Hero */}
+      <section className="min-h-screen flex flex-col bg-gradient-to-b from-surface-50 via-brand-50/20 to-surface-50">
+        <Navbar />
+        <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-    className="text-gray-700 text-4xl font-bold font-weight-500">
-        Turn Lecture Recordings into Clear Notes using AI
-    </motion.h1>
-    <p className="text-gray-700 text-base py-4 font-weight-100"> 
-        Upload your lecture audio and get structured notes, summaries and key points in seconds
-    </p>
-    <motion.button onClick={()=>navigate("/login")}
-            whileHover={{ scale: 1.1, z: 50 }}
-            whileTap={{ scale: 0.9 }} 
-            className="mt-8 rounded-md  bg-violet-600 text-white px-8 py-3 hover:bg-violet-500 cursor-pointer transition" >Get Started
-</motion.button>
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="max-w-3xl"
+          >
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-200 mb-6"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse-dot" />
+              AI-Powered Note Generation
+            </motion.span>
 
-</div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-surface-900 tracking-tight leading-tight">
+              Turn Lecture Recordings into{' '}
+              <span className="bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent">
+                Clear Notes
+              </span>
+            </h1>
 
-    </section>
+            <p className="mt-5 text-lg text-surface-500 max-w-xl mx-auto leading-relaxed">
+              Upload your lecture audio and get structured notes, summaries, and key points in seconds — powered by AI.
+            </p>
 
-{/* ABOUT SECTION (SCROLL DOWN) */}
-      <section id="About" className="bg-white py-10 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          
-          <h2 className="text-3xl font-bold text-gray-700 mb-4">
-            About
-          </h2>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate("/login")}
+              className="mt-8 bg-brand-600 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-brand-700 transition-colors shadow-xl shadow-brand-500/25 cursor-pointer text-base inline-flex items-center gap-2"
+            >
+              Get Started Free
+              <FaArrowRight className="text-sm" />
+            </motion.button>
 
-          <p className="text-gray-600 max-w-3xl mx-auto">
-            Lecturely helps students convert lecture recordings into clean, structured notes
-            using AI — saving time and improving understanding.
-          </p>
-
+            {/* Trust bar */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="mt-12 flex items-center justify-center gap-6 text-xs text-surface-400"
+            >
+              <span className="flex items-center gap-1.5"><FaStar className="text-amber-400" /> Accurate transcription</span>
+              <span className="flex items-center gap-1.5"><FaBolt className="text-brand-500" /> Fast processing</span>
+              <span className="flex items-center gap-1.5"><FaShieldAlt className="text-emerald-400" /> Secure uploads</span>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-<section className="px-5 py-5 bg-slate-50">
-    <h1 className="text-3xl text-center mt-4 px-2 font-bold text-gray-700 mb-4">How it works</h1>
-    <div className=" max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-
-<motion.div  
-variants={cardVariants}
-            initial="initial"
-            whileInView="animate"
-            whileHover="hover"
+      {/* How It Works */}
+      <section className="px-6 py-24 bg-surface-50">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            onClick={()=>navigate("/login")}
- className="bg-white rounded-lg shadow-sm tecxt-center py-6 hover:shadow-lg cursor-pointer transition ">
-    <img src={upload} className="h-50 w-50 mx-auto mb-4" />
-    <h4 className="text-gray-800 text-md text-center font-weight-600 text-bold ">Upload Lecture</h4>
-    <p className="text-center mt-3 text-gray-500 ">  Upload your lecture recording or audio here</p>
+            className="text-center mb-14"
+          >
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-surface-100 text-surface-600 border border-surface-200 mb-4">
+              How it works
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-surface-900">Three simple steps</h2>
+            <p className="text-surface-500 mt-3 max-w-md mx-auto">From recording to notes in minutes.</p>
+          </motion.div>
 
-</motion.div>
-<motion.div 
-variants={cardVariants}
-            initial="initial"
-            whileInView="animate"
-            whileHover="hover"
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {[
+              { img: upload, icon: FaMicrophone, title: "Upload Lecture", desc: "Upload your lecture recording or audio file in any common format.", delay: 0 },
+              { img: ai, icon: FaBrain, title: "AI Processing", desc: "Our AI transcribes and understands your lecture content with high accuracy.", delay: 0.15 },
+              { img: notes, icon: FaStickyNote, title: "Get Smart Notes", desc: "Receive clean notes, summaries, and key takeaways instantly.", delay: 0.3 },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                custom={item.delay}
+                variants={fadeUp}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                onClick={() => navigate("/login")}
+                className="bg-surface-100 rounded-2xl border border-surface-200 p-8 text-center shadow-sm hover:shadow-xl hover:shadow-brand-500/5 hover:border-brand-200/50 transition-all duration-300 cursor-pointer group"
+              >
+                <div className="w-16 h-16 mx-auto mb-5 rounded-xl bg-brand-50 flex items-center justify-center group-hover:bg-brand-100 group-hover:scale-105 transition-all duration-300">
+                  <item.icon className="text-xl text-brand-500" />
+                </div>
+                <div className="w-20 h-20 mx-auto mb-5 hidden">
+                  <img src={item.img} className="w-full h-full object-contain" alt={item.title} />
+                </div>
+                <h3 className="text-lg font-bold text-surface-800 mb-2">{item.title}</h3>
+                <p className="text-sm text-surface-500 leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About */}
+      <section id="About" className="py-24 px-6 bg-surface-50/80">
+        <div className="max-w-5xl mx-auto text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-   className="bg-white  rounded-lg shadow-sm text-center py-6 hover:shadow-lg cursor-pointer transition ">
-    <img src={ai} className="h-50 w-50 mx-auto mb-4 "/>
-    <h4 className="text-gray-800 text-md text-center font-weight-600 text-bold ">AI Processing</h4>
-    <p className="text-center mt-3 text-gray-500 ">Our AI transcribes and understand your lecture content</p>
-
-</motion.div>
-<motion.div variants={cardVariants}
-            initial="initial"
-            whileInView="animate"
-            whileHover="hover"
+            className="text-3xl md:text-4xl font-bold text-surface-900 mb-4"
+          >
+            About Lecturely
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
- className="bg-white rounded-lg shadow-sm text-center py-6 hover:shadow-lg cursor-pointer transition ">
-    <img src={notes} className="h-50 w-50 mx-auto mb-4" />
-    <h4 className="text-gray-800 text-md text-center font-weight-600 text-bold ">Get Smart Notes</h4>
-    <p className="text-center mt-3 text-gray-500 ">Receive Clean notes, summaries and key takeaways instantly.</p>
+            transition={{ delay: 0.1 }}
+            className="text-surface-500 max-w-2xl mx-auto leading-relaxed text-base"
+          >
+            Lecturely helps students convert lecture recordings into clean, structured notes using AI — saving time and improving understanding.
+          </motion.p>
 
-</motion.div>
-    </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="mt-10 max-w-lg mx-auto"
+          >
+            <div className="bg-surface-100 rounded-2xl border border-surface-200 p-8 shadow-sm hover:shadow-xl hover:shadow-brand-500/5 transition-all duration-300">
+              <div className="w-14 h-14 rounded-xl bg-brand-50 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+              </div>
+              <h3 className="text-lg font-bold text-surface-900 mb-2">Smart AI Notes, Instantly</h3>
+              <p className="text-sm text-surface-500 mb-6 leading-relaxed">
+                Stop rewatching hours of lectures. Let AI transcribe, summarize, and organize your notes so you can focus on learning.
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigate("/login")}
+                className="bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-xl hover:bg-brand-700 transition-colors shadow-md shadow-brand-500/20 cursor-pointer text-sm inline-flex items-center gap-2"
+              >
+                Get Started Free
+                <FaArrowRight className="text-xs" />
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-</section>
-
+      {/* Footer */}
+      <footer className="py-8 px-6 text-center text-sm text-surface-400 border-t border-surface-100 bg-surface-50">
+        &copy; {new Date().getFullYear()} Lecturely. All rights reserved.
+      </footer>
     </>
   )
-
 }
 
 export default HomePage

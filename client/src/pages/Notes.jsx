@@ -1,333 +1,281 @@
-import React, {useState, useEffect} from 'react'
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import {
+  FaArrowLeft, FaFileAlt, FaRegClock, FaSpinner, FaInfoCircle, FaMicrophone,
+  FaLightbulb, FaListUl, FaQuoteRight, FaUser, FaBookOpen,
+} from 'react-icons/fa';
 import logo from "../assets/Logo.png"
-import SideBar from "../components/SideBar"
-import { useNavigate, useParams } from 'react-router-dom';
-import jsPDF from "jspdf";
-import {AuthContext} from "../context/AuthContext"
-import {useContext} from 'react'
-import axios from "axios";
+
+const formatContent = (text) => {
+  if (!text) return [];
+  return text.split('\n\n').filter(Boolean).map((block) => {
+    const boldMatch = block.match(/^\*\*(.+)\*\*/);
+    if (boldMatch) {
+      return { type: 'section', title: boldMatch[1], body: block.replace(/^\*\*.+\*\*/, '').trim() };
+    }
+    if (block.startsWith('• ') || block.match(/^\d+\.\s/)) {
+      return { type: 'list', body: block };
+    }
+    return { type: 'text', body: block };
+  });
+};
 
 const Notes = () => {
+  const { lectureId } = useParams();
+  const navigate = useNavigate();
+  const [lecture, setLecture] = useState(null);
+  const [notes, setNotes] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const {user} = useContext(AuthContext);
-const {lectureId}=useParams();
-const navigate=useNavigate();
-const [lecture, setLecture] = useState(null);
-const [notes, setNotes]=useState(null);
-const [loading,setLoading]=useState(true);
-const[isEditing, setIsEditing]=useState(false);
-const[editedContent, setEditedContent]=useState("");
-const [saving, setSaving]=useState(false);
-const [highlights, setHighlights] = useState([]);
-
-
-useEffect(()=>{
-  const fetchNotes = async ()=>{
-    try{
-      const token=localStorage.getItem("token");
-
-      const {data}=await axios.get(`/api/notes/${lectureId}`,{
-        headers:{token}
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        const { data } = await axios.get(`/api/notes/${lectureId}`, { headers: { token } });
+        if (data.success) {
+          setLecture(data.lecture);
+          setNotes(data.notes);
+        } else {
+          setError(data.message || 'Could not load notes');
         }
-      );
-
-      if(data.success){
-        setNotes(data.notes);
-        setEditedContent(data.notes.content);
-        setLecture(data.lecture);
-          setHighlights(data.notes.highlights || []);
-
+      } catch {
+        setError('Failed to fetch lecture data');
+      } finally {
+        setLoading(false);
       }
-    }
-    catch(error){
-      console.log(error.message);
-    }
-    finally{
-      setLoading(false);
-    }
-  };
-  if(lectureId){
-  fetchNotes();
-  }
-}, [lectureId]);
+    };
+    fetchData();
+  }, [lectureId]);
 
-
-
- if (loading) {
-    return <div className="p-20 text-center"><p className="text-gray-500">Loading notes...</p></div>;
-  }
-
-  if (!lecture) {
+  // Loading
+  if (loading) {
     return (
-      <div className="p-20 text-center">
-        <h2 className="text-xl">No data found for this lecture.</h2>
-        <button onClick={() => navigate('/dashboard')} className="text-violet-600 underline mt-4 hover:cursor-pointer text-violet-500">
-          Go to Dashboard
-        </button>
+      <div className="min-h-screen bg-surface-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mx-auto mb-5">
+            <FaSpinner className="text-brand-500 text-xl animate-spin" />
+          </div>
+          <div className="skeleton h-4 w-40 mx-auto mb-2" />
+          <div className="skeleton h-3 w-28 mx-auto" />
+        </div>
       </div>
     );
-   }
-
-  const downloadPdf = () => {
-    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-    const title = lecture?.title || 'Lecture Notes';
-    const body = notes?.content || '';
-
-    doc.setFontSize(18);
-    doc.text(title, 40, 60);
-
-    doc.setFontSize(12);
-    const lines = doc.splitTextToSize(body, 520);
-    doc.text(lines, 40, 90);
-
-    doc.save(`${title.replace(/[^a-z0-9\- ]/gi, '_')}.pdf`);
-  };
-
-
-
-  const downloadTxt = () => {
-    const body = notes?.content || '';
-    const blob = new Blob([body], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${lecture?.title || 'notes'}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-
-  const saveNotes = async () => {
-  try {
-    setSaving(true);
-    const { data } = await axios.put(
-      `/api/notes/${notes._id}`,
-      { content: editedContent },
-      {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
-      }
-    );
-
-    if (data.success) {
-      setNotes({ ...notes, content: editedContent });
-      setEditedContent(editedContent);
-      setIsEditing(false);
-    } else {
-      console.error("Failed to save notes:", data.message);
-      alert("Failed to save notes. Please try again.");
-    }
-  } catch (error) {
-    console.error("Error saving notes:", error.message);
-    alert("Error saving notes. Please try again.");
-  } finally {
-    setSaving(false);
   }
-};
 
-const handleHighlight = () => {
-  const selection = window.getSelection();
+  // Error
+  if (error || !lecture) {
+    return (
+      <div className="min-h-screen bg-surface-50 flex items-center justify-center">
+        <div className="text-center max-w-sm">
+          <div className="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-5">
+            <FaInfoCircle className="text-red-400 text-2xl" />
+          </div>
+          <h2 className="text-xl font-bold text-surface-900 mb-1.5">Lecture not found</h2>
+          <p className="text-sm text-surface-500 mb-6">{error || "The lecture you're looking for doesn't exist."}</p>
+          <button onClick={() => navigate('/dashboard')}
+            className="bg-brand-600 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20 cursor-pointer">
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-  if (!selection || selection.rangeCount === 0) return;
-
-  const range = selection.getRangeAt(0);
-
-  // Prevent empty selection
-  if (range.collapsed) return;
-
-  // Ensure selection is inside notes
-  const container = document.getElementById("notes-content");
-  if (!container.contains(range.commonAncestorContainer)) return;
-
-  const mark = document.createElement("mark");
-  mark.style.backgroundColor = "#fde68a"; // yellow-300
-  mark.style.padding = "2px";
-  mark.style.borderRadius = "4px";
-
-  range.surroundContents(mark);
-  selection.removeAllRanges();
-
-  const newContent = container.innerHTML;
-  setNotes(prev => ({ ...prev, content: newContent }));
-  setEditedContent(newContent);
-};
-
-      
-
-const handleRemoveHighlight = (e) => {
-  const target = e.target;
-
-  // Only act if clicking on highlighted text
-  if (target.tagName !== "MARK") return;
-
-  const parent = target.parentNode;
-  const textNode = document.createTextNode(target.innerText);
-
-  parent.replaceChild(textNode, target);
-
-  // Merge adjacent text nodes (important!)
-  parent.normalize();
-
-  const container = document.getElementById("notes-content");
-  const newContent = container.innerHTML;
-  setNotes(prev => ({ ...prev, content: newContent }));
-  setEditedContent(newContent);
-};
+  const isProcessing = lecture.status === "processing";
+  const isCompleted = lecture.status === "completed";
+  const isFailed = lecture.status === "failed";
+  const contentBlocks = formatContent(notes?.content);
 
   return (
-    <div>
-        <div className="flex justify-between my-0 items-center bg-white sticky top-0 z-50 max-w-7xl px-6 py-3 min-w-screen " >
-                                <div className="flex gap-2 items-center">
-                                    <img src={logo} className="w-15 h-15"/>
-                                    <p className="text-gray-700 text-lg  font-bold">Lecturely</p>
-                                </div>
-                                 {user && (
-        <div className="flex items-center px-1 gap-2">
-          <div className="w-8 h-8 rounded-full bg-violet-500 text-white flex items-center justify-center font-bold">
-            {user.name[0]}
-          </div>
-          <p className="text-gray-700 font-medium">{user.name}</p>
-        </div>
-      )}
-                                </div>
+    <div className="min-h-screen bg-surface-50">
+      {/* Sticky brand header */}
+      <div className="flex items-center gap-2.5 px-6 py-3.5 border-b border-surface-100 bg-surface-50/80 backdrop-blur-xl sticky top-0 z-40">
+        <img src={logo} className="w-7 h-7" alt="Lecturely" />
+        <span className="text-base font-bold text-surface-800 tracking-tight">Lecturely</span>
+      </div>
 
-
-        <div className="flex flex-row" >
-    <SideBar />   
- <div className="flex-1 px-8 py-6">
-
-          {/* TITLE */}
-          <h1 className="text-2xl font-bold text-gray-700 mb-2">
-            {lecture.title}
-          </h1>
-
-          {/* STATUS */}
-          <span className="inline-block mb-6 px-4 py-1 rounded-full text-sm bg-green-100 text-green-700">
-            {lecture.status}
-          </span>
-
-          <div className="flex gap-3 mb-4">
-            <button  title="download in pdf format"
-             onClick={downloadPdf}
-              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:bg-violet-700 shadow-md cursor-pointer transition">PDF</button>
-            <button title="download in txt format"
-             onClick={downloadTxt}
-              className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold shadow-sm hover:bg-violet-700 shadow-md cursor-pointer transition">TXT</button>
-          </div>
-
-          {/* NOTES CARD */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-<div className="flex gap-2 mb-3">
-  <button
-    onClick={() => handleHighlight("yellow")}
-    className="px-3 py-1 bg-yellow-300 rounded text-sm hover:bg-yellow-400 cursor-pointer  transition"
-    title="Select text to highlight and click to remove!"
-  >
-    Highlight
-  </button>
-
-
-</div>
-
-<div className="flex justify-between items-center mb-4">
-  <h3 className="text-lg font-semibold text-gray-700">
-    Generated Notes
-  </h3>
-
-  {!isEditing && (
-    <button
-      onClick={() => {
-        const plain = notes.content.replace(/<[^>]*>/g, '');
-        setEditedContent(plain);
-        setIsEditing(true);
-      }}
-      className="text-violet-500 hover:text-violet-700"
-      title="Edit notes"
-    >
-      ✏️
-    </button>
-  )}
-</div>
-
-
-            {isEditing ? (
-  <>
-    <textarea
-      value={editedContent}
-      onChange={(e) => setEditedContent(e.target.value)}
-      className="w-full min-h-[300px] border rounded-md p-3 text-gray-700 focus:outline-violet-500"
-    />
-
-    <div className="flex gap-3 mt-4">
-      <button
-        onClick={saveNotes}
-        disabled={saving}
-        className="bg-violet-500 px-4 py-2 rounded-md text-white font-semibold"
-      >
-        {saving ? "Saving..." : "Save"}
-      </button>
-
-      <button
-        onClick={() => {
-          setEditedContent(notes.content);
-          setIsEditing(false);
-        }}
-        className="bg-gray-200 px-4 py-2 rounded-md text-gray-700 font-semibold"
-      >
-        Cancel
-      </button>
-    </div>
-  </>
-) : (
- <div
-  id="notes-content"
-  className="text-gray-600 leading-relaxed whitespace-pre-line cursor-text"
-  onMouseUp={handleHighlight}
-  onClick={handleRemoveHighlight}
-  dangerouslySetInnerHTML={{ __html: notes.content }}
-/>
-
-
-)}
-</div>
-
-
-
-{notes.chapters?.length > 0 && (
-            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                Auto Chapters
-              </h3>
-
-              {notes.chapters.map((ch, index) => (
-                <div
-                  key={index}
-                  className="mb-4 p-4 border rounded-md hover:bg-gray-50"
-                >
-                  <p className="font-semibold text-gray-800">
-                    {index + 1}. {ch.headline}
-                  </p>
-
-                  <p className="text-sm text-gray-600 mt-1">
-                    {ch.summary}
-                  </p>
-
-                  <p className="text-xs text-gray-400 mt-1">
-                    ⏱ {Math.floor(ch.start / 1000)}s –{" "}
-                    {Math.floor(ch.end / 1000)}s
-                  </p>
-                </div>
-              ))}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Top bar */}
+        <div className="flex items-center justify-between mb-8">
+          <button onClick={() => navigate('/dashboard')}
+            className="flex items-center gap-2 text-sm font-medium text-surface-500 hover:text-surface-700 transition-colors cursor-pointer group">
+            <div className="w-7 h-7 rounded-lg bg-surface-100 flex items-center justify-center group-hover:bg-surface-200 transition-colors">
+              <FaArrowLeft className="text-[10px]" />
             </div>
-          )}
-
-          
-
+            Back
+          </button>
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 px-3 py-1.5 rounded-full">
+            <FaRegClock className="text-[10px]" />
+            {lecture.createdAt
+              ? new Date(lecture.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+              : ''}
+          </span>
         </div>
-    </div>
-    </div>
-  )
-}
 
-export default Notes
+        {/* Title */}
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
+              <FaBookOpen className="text-brand-500 text-sm" />
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-surface-900">{lecture.title}</h1>
+          </div>
+        </motion.div>
+
+        {/* Processing state */}
+        {isProcessing && (
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+            className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto mb-5">
+              <FaSpinner className="text-2xl text-amber-400 animate-spin" />
+            </div>
+            <h2 className="text-lg font-bold text-surface-900 mb-1.5">Processing your lecture</h2>
+            <p className="text-sm text-surface-500 mb-1">{lecture.progressMessage || 'This may take a few minutes depending on the audio length.'}</p>
+            <p className="text-xs text-surface-400">You can leave and come back later — results are saved automatically.</p>
+          </motion.div>
+        )}
+
+        {/* Failed state */}
+        {isFailed && (
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+            className="bg-red-500/10 border border-red-500/20 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-5">
+              <FaInfoCircle className="text-2xl text-red-400" />
+            </div>
+            <h2 className="text-lg font-bold text-surface-900 mb-1.5">Processing failed</h2>
+            <p className="text-sm text-surface-500 mb-6">Something went wrong. Please try uploading again.</p>
+            <button onClick={() => navigate('/upload')}
+              className="bg-red-600 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-red-500/20 cursor-pointer">
+              Try Again
+            </button>
+          </motion.div>
+        )}
+
+        {/* Completed — content */}
+        {isCompleted && notes && (
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
+
+            {/* Chapters */}
+            {notes.chapters && notes.chapters.length > 0 && (
+              <section>
+                <div className="flex items-center gap-2 mb-4">
+                  <FaListUl className="text-brand-500 text-xs" />
+                  <h2 className="text-sm font-bold text-surface-900 uppercase tracking-wider">Chapters</h2>
+                  <span className="text-xs text-surface-400">({notes.chapters.length})</span>
+                </div>
+                <div className="space-y-3">
+                  {notes.chapters.map((ch, idx) => (
+                    <div key={idx}
+                      className="bg-surface-100 rounded-2xl border border-surface-200 p-5 border-l-[3px] border-l-brand-500 hover:border-surface-300 transition-all">
+                      <div className="flex items-start gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-brand-50 flex items-center justify-center shrink-0 mt-0.5">
+                          <FaFileAlt className="text-xs text-brand-500" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-base font-bold text-surface-900 mb-1">{ch.headline || `Chapter ${idx + 1}`}</h3>
+                          <p className="text-sm text-surface-600 leading-relaxed">{ch.summary}</p>
+                          {ch.start != null && (
+                            <span className="inline-flex items-center gap-1 mt-2 text-[11px] font-medium text-surface-400 bg-surface-200 px-2 py-0.5 rounded-full">
+                              <FaRegClock className="text-[9px]" />
+                              {Math.floor(ch.start / 60)}:{String(ch.start % 60).padStart(2, '0')}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Notes content */}
+            {contentBlocks.length > 0 && (
+              <section>
+                <div className="flex items-center gap-2 mb-4">
+                  <FaLightbulb className="text-amber-400 text-xs" />
+                  <h2 className="text-sm font-bold text-surface-900 uppercase tracking-wider">Notes</h2>
+                </div>
+                <div className="bg-surface-100 rounded-2xl border border-surface-200 p-6 md:p-8">
+                  <div className="space-y-5">
+                    {contentBlocks.map((block, idx) => {
+                      if (block.type === 'section') {
+                        return (
+                          <div key={idx}>
+                            <h3 className="text-base font-bold text-surface-900 mb-1.5 flex items-center gap-2">
+                              <span className="w-1 h-5 rounded-full bg-brand-500 shrink-0" />
+                              {block.title}
+                            </h3>
+                            {block.body && <p className="text-sm text-surface-600 leading-relaxed pl-3">{block.body}</p>}
+                          </div>
+                        );
+                      }
+                      if (block.type === 'list') {
+                        return (
+                          <div key={idx} className="pl-3">
+                            {block.body.split('\n').map((line, li) => (
+                              <p key={li} className={`text-sm text-surface-600 leading-relaxed ${line.startsWith('   ') ? 'ml-5 text-surface-500' : ''} ${line.startsWith('• ') ? 'flex items-start gap-2' : ''}`}>
+                                {line.startsWith('• ') && <span className="text-brand-500 shrink-0 mt-0.5">•</span>}
+                                <span>{line.replace(/^[•\s]+/, '')}</span>
+                              </p>
+                            ))}
+                          </div>
+                        );
+                      }
+                      return (
+                        <p key={idx} className="text-sm text-surface-600 leading-relaxed pl-3">{block.body}</p>
+                      );
+                    })}
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Speakers */}
+            {notes.speakers && notes.speakers.length > 0 && (
+              <section>
+                <div className="flex items-center gap-2 mb-4">
+                  <FaUser className="text-sky-400 text-xs" />
+                  <h2 className="text-sm font-bold text-surface-900 uppercase tracking-wider">Speakers</h2>
+                  <span className="text-xs text-surface-400">({notes.speakers.length})</span>
+                </div>
+                <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+                  {notes.speakers.map((sp, idx) => (
+                    <div key={idx}
+                      className="bg-surface-100 rounded-xl border border-surface-200 p-4 flex items-start gap-3 hover:border-surface-300 transition-colors">
+                      <span className="shrink-0 text-[11px] font-bold text-transparent bg-clip-text bg-gradient-to-br from-brand-500 to-brand-400 bg-brand-50 px-2.5 py-1 rounded-lg mt-0.5">
+                        {sp.speaker || `Speaker ${idx + 1}`}
+                      </span>
+                      <p className="text-sm text-surface-600 leading-relaxed">{sp.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Bottom metadata */}
+            <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-surface-200">
+              <span className="inline-flex items-center gap-1.5 text-xs text-surface-400 bg-surface-100 px-3 py-1.5 rounded-full">
+                <FaRegClock className="text-[10px]" />
+                {notes.chapters?.length || 0} chapters
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs text-surface-400 bg-surface-100 px-3 py-1.5 rounded-full">
+                <FaMicrophone className="text-[10px]" />
+                {notes.speakers?.length || 0} speakers
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs text-surface-400 bg-surface-100 px-3 py-1.5 rounded-full">
+                <FaQuoteRight className="text-[10px]" />
+                {contentBlocks.length} sections
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Notes;

@@ -1,43 +1,28 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext'; // Ensure this path is correct
+import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import axios from "axios"
-const SettingsModal = ({ isOpen, onClose}) => {
+import axios from "axios";
+import { FaTimes, FaEnvelope, FaBookOpen, FaSignOutAlt, FaSave } from "react-icons/fa";
 
-  const {  user, logoutUser } = useContext(AuthContext);
+const SettingsModal = ({ isOpen, onClose }) => {
+  const { user, logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  // Local state for the editable email
   const [email, setEmail] = useState("");
   const [notesPreference, setNotesPreference] = useState("paragraph");
-  const[loading, setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
-    if (user.email) {
-      setEmail(user.email);
+      if (user.email) setEmail(user.email);
+      if (user.notesPreference) setNotesPreference(user.notesPreference);
     }
-    if (user.notesPreference) {
-      setNotesPreference(user.notesPreference);
-    }
-  }
   }, [user]);
 
-const handleSave = async () => {
+  const handleSave = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-
-      await axios.put(
-        "/api/user/preferences",
-        { 
-          email,
-          notesPreference,
-         },
-        {
-          headers: { token },
-        }
-      );
-
+      await axios.put("/api/user/preferences", { email, notesPreference }, { headers: { token } });
       onClose();
     } catch (error) {
       console.error("Failed to update preferences");
@@ -48,98 +33,94 @@ const handleSave = async () => {
 
   const handleLogout = () => {
     logoutUser();
-    navigate('/login'); // Redirect to login after clearing state
+    navigate('/login');
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 mx-4 border border-gray-100">
-        
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4"
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-surface-50 w-full max-w-md rounded-2xl shadow-xl border border-surface-100 overflow-hidden animate-in"
+      >
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Settings</h2>
-          <button 
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl transition-colors cursor-pointer"
-          >
-            &times;
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-100">
+          <div>
+            <h2 className="text-lg font-bold text-surface-900">Settings</h2>
+            <p className="text-sm text-surface-400 mt-0.5">Manage your preferences</p>
+          </div>
+          <button onClick={onClose}
+            className="w-8 h-8 rounded-lg bg-surface-100 flex items-center justify-center text-surface-500 hover:bg-surface-200 transition-colors cursor-pointer">
+            <FaTimes className="text-xs" />
           </button>
         </div>
 
-        <div className="space-y-6">
-          
-          {/* 3. Contact Email (Editable) */}
+        <div className="px-6 py-5 space-y-6">
+
+          {/* Email */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="flex items-center gap-2 text-sm font-semibold text-surface-700 mb-2">
+              <FaEnvelope className="text-surface-400" />
               Contact Email
             </label>
-            <div className="relative">
-              <input 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-3 pr-10 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition"
-              />
-              <span className="absolute right-3 top-2.5 text-gray-400 text-xs">Edit</span>
-            </div>
-            <p className="text-[10px] text-gray-400 mt-1">This email will be used for AI summary alerts.</p>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3.5 py-2.5 border border-surface-200 rounded-xl text-sm text-surface-900 bg-surface-50 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"
+            />
+            <p className="text-xs text-surface-400 mt-1">Used for AI summary alerts</p>
           </div>
 
-<div className="space-y-4">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+          {/* Notes format */}
+          <div>
+            <label className="flex items-center gap-2 text-sm font-semibold text-surface-700 mb-3">
+              <FaBookOpen className="text-surface-400" />
               Notes Format
             </label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="notesPreference"
-                  value="paragraph"
-                  checked={notesPreference === "paragraph"}
-                  onChange={(e) => setNotesPreference(e.target.value)}
-                  className="accent-violet-500"
-                />
-                <span className="text-sm text-gray-600">Paragraph</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="notesPreference"
-                  value="keypoints"
-                  checked={notesPreference === "keypoints"}
-                  onChange={(e) => setNotesPreference(e.target.value)}
-                  className="accent-violet-500"
-                />
-                <span className="text-sm text-gray-600">Key Points</span>
-              </label>
+            <div className="flex gap-3">
+              {["paragraph", "keypoints"].map((opt) => (
+                <label key={opt} className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                  notesPreference === opt
+                    ? "border-brand-500 bg-brand-50 text-brand-700"
+                    : "border-surface-200 bg-surface-50 text-surface-500 hover:border-surface-300 hover:text-surface-700"
+                }`}>
+                  <input type="radio" name="notesPreference" value={opt}
+                    checked={notesPreference === opt}
+                    onChange={(e) => setNotesPreference(e.target.value)}
+                    className="sr-only"
+                  />
+                  <span className="text-sm font-medium capitalize">{opt === "paragraph" ? "Paragraph" : "Key Points"}</span>
+                </label>
+              ))}
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold text-red-600">Account</p>
-              <p className="text-xs text-gray-400">Sign out of your session</p>
+          {/* Logout */}
+          <div className="flex items-center justify-between p-4 rounded-xl bg-red-500/5 border border-red-500/10">
+            <div className="flex items-center gap-3">
+              <FaSignOutAlt className="text-red-400" />
+              <div>
+                <p className="text-sm font-semibold text-red-600">Account</p>
+                <p className="text-xs text-red-400">Sign out of your session</p>
+              </div>
             </div>
-            <button 
-              onClick={handleLogout}
-              className="text-xs font-bold text-red-500 border border-red-200 px-4 py-2 rounded-lg hover:bg-red-50 transition cursor-pointer"
-            >
+            <button onClick={handleLogout}
+              className="text-xs font-bold text-red-500 border border-red-500/20 px-4 py-2 rounded-lg hover:bg-red-500/10 transition-all cursor-pointer">
               Logout
             </button>
           </div>
-
-
         </div>
 
-        {/* Footer */}
-        <div className="mt-8">
-          <button 
+        {/* Save */}
+        <div className="px-6 pb-6 pt-2">
+          <button
             onClick={handleSave}
-            className="w-full bg-violet-600 text-white font-bold py-3 rounded-xl hover:bg-violet-700 active:scale-[0.98] transition cursor-pointer"
+            disabled={loading}
+            className="w-full bg-brand-600 text-white font-semibold py-3 rounded-xl hover:bg-brand-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer transition-all text-sm active:scale-[0.99]"
           >
-            {loading ? "Saving..." : "Save & Close"}
+            {loading ? <><FaSave className="animate-spin" /> Saving...</> : <><FaSave /> Save Changes</>}
           </button>
         </div>
       </div>
