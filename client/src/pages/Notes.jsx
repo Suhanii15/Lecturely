@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import {
   FaArrowLeft, FaFileAlt, FaRegClock, FaSpinner, FaInfoCircle, FaMicrophone,
   FaLightbulb, FaListUl, FaQuoteRight, FaUser, FaBookOpen,
+  FaFilePdf, FaFileDownload,
 } from 'react-icons/fa';
 import logo from "../assets/Logo.png"
 
@@ -90,6 +91,63 @@ const Notes = () => {
   const isFailed = lecture.status === "failed";
   const contentBlocks = formatContent(notes?.content);
 
+  const buildTextContent = () => {
+    const lines = [];
+    lines.push(lecture?.title || 'Untitled');
+    lines.push('='.repeat(40));
+    lines.push(`Date: ${lecture?.createdAt ? new Date(lecture.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'N/A'}`);
+    lines.push('');
+    if (notes?.chapters?.length) {
+      lines.push('CHAPTERS');
+      lines.push('-'.repeat(40));
+      notes.chapters.forEach((ch, i) => {
+        lines.push(`\n${ch.headline || `Chapter ${i + 1}`}`);
+        if (ch.start != null) lines.push(`  [${Math.floor(ch.start / 60)}:${String(ch.start % 60).padStart(2, '0')}]`);
+        lines.push(`  ${ch.summary}`);
+      });
+      lines.push('');
+    }
+    if (notes?.content) {
+      lines.push('NOTES');
+      lines.push('-'.repeat(40));
+      lines.push(`\n${notes.content}`);
+      lines.push('');
+    }
+    if (notes?.speakers?.length) {
+      lines.push('SPEAKERS');
+      lines.push('-'.repeat(40));
+      notes.speakers.forEach((sp) => {
+        lines.push(`\n${sp.speaker || 'Speaker'}: ${sp.text}`);
+      });
+    }
+    return lines.join('\n');
+  };
+
+  const exportTxt = () => {
+    const text = buildTextContent();
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${lecture?.title || 'notes'}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportPdf = async () => {
+    const { jsPDF } = await import('jspdf');
+    const pdf = new jsPDF();
+    const text = buildTextContent();
+    const lines = pdf.splitTextToSize(text, 170);
+    let y = 20;
+    for (const line of lines) {
+      if (y > 275) { pdf.addPage(); y = 20; }
+      pdf.text(line, 20, y);
+      y += 6;
+    }
+    pdf.save(`${lecture?.title || 'notes'}.pdf`);
+  };
+
   return (
     <div className="min-h-screen bg-surface-50">
       {/* Sticky brand header */}
@@ -108,12 +166,28 @@ const Notes = () => {
             </div>
             Back
           </button>
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 px-3 py-1.5 rounded-full">
-            <FaRegClock className="text-[10px]" />
-            {lecture.createdAt
-              ? new Date(lecture.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-              : ''}
-          </span>
+          <div className="flex items-center gap-2">
+            {isCompleted && (
+              <>
+                <button onClick={exportPdf}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 hover:bg-surface-200 px-3 py-1.5 rounded-full transition-colors cursor-pointer">
+                  <FaFilePdf className="text-[10px]" />
+                  PDF
+                </button>
+                <button onClick={exportTxt}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 hover:bg-surface-200 px-3 py-1.5 rounded-full transition-colors cursor-pointer">
+                  <FaFileDownload className="text-[10px]" />
+                  TXT
+                </button>
+              </>
+            )}
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 px-3 py-1.5 rounded-full">
+              <FaRegClock className="text-[10px]" />
+              {lecture.createdAt
+                ? new Date(lecture.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                : ''}
+            </span>
+          </div>
         </div>
 
         {/* Title */}
