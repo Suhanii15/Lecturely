@@ -18,10 +18,10 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const endpoint = isLogin ? '/api/user/login' : '/api/user/register';
+      const url = `${import.meta.env.VITE_API_URL}/api/user/${isLogin ? 'login' : 'signup'}`;
       const body = isLogin ? { email, password } : { name, email, password };
 
-      const res = await fetch(endpoint, {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

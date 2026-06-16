@@ -62,7 +62,7 @@ const Upload = () => {
       formData.append("title", title);
 
       setUploadProgress(30);
-      let res = await fetch("/api/lectures/upload", {
+      let res = await fetch(`${import.meta.env.VITE_API_URL}/api/lectures/upload`, {
         method: "POST",
         headers: { token },
         body: formData,
