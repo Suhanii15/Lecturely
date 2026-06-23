@@ -3,7 +3,8 @@
 Lecturely is a full‑stack web application that helps students convert recorded lectures into structured, editable study notes. It focuses on **productivity, clarity, and usability**, allowing users to manage lectures, view generated notes, highlight important parts, and export notes in multiple formats.
 
 ---
-
+## Live Demo
+Live:[https://lecturely-wheat.vercel.app/]
 ## ✨ Key Features
 
 ### 📂 Lecture Management
