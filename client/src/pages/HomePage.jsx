@@ -34,15 +34,7 @@ const HomePage = () => {
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="max-w-3xl"
           >
-            <motion.span
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-200 mb-6"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse-dot" />
-              AI-Powered Note Generation
-            </motion.span>
+            
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-surface-900 tracking-tight leading-tight">
               Turn Lecture Recordings into{' '}
@@ -65,23 +57,13 @@ const HomePage = () => {
               <FaArrowRight className="text-sm" />
             </motion.button>
 
-            {/* Trust bar */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="mt-12 flex items-center justify-center gap-6 text-xs text-surface-400"
-            >
-              <span className="flex items-center gap-1.5"><FaStar className="text-amber-400" /> Accurate transcription</span>
-              <span className="flex items-center gap-1.5"><FaBolt className="text-brand-500" /> Fast processing</span>
-              <span className="flex items-center gap-1.5"><FaShieldAlt className="text-emerald-400" /> Secure uploads</span>
-            </motion.div>
+           
           </motion.div>
         </div>
-      </section>
+      
 
       {/* How It Works */}
-      <section className="px-6 py-24 bg-surface-50">
+      <div id ="About" className="px-6 py-24 bg-surface-50">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -125,57 +107,12 @@ const HomePage = () => {
             ))}
           </div>
         </div>
+      </div>
       </section>
 
-      {/* About */}
-      <section id="About" className="py-24 px-6 bg-surface-50/80">
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-surface-900 mb-4"
-          >
-            About Lecturely
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-surface-500 max-w-2xl mx-auto leading-relaxed text-base"
-          >
-            Lecturely helps students convert lecture recordings into clean, structured notes using AI — saving time and improving understanding.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="mt-10 max-w-lg mx-auto"
-          >
-            <div className="bg-surface-100 rounded-2xl border border-surface-200 p-8 shadow-sm hover:shadow-xl hover:shadow-brand-500/5 transition-all duration-300">
-              <div className="w-14 h-14 rounded-xl bg-brand-50 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-7 h-7 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-              </div>
-              <h3 className="text-lg font-bold text-surface-900 mb-2">Smart AI Notes, Instantly</h3>
-              <p className="text-sm text-surface-500 mb-6 leading-relaxed">
-                Stop rewatching hours of lectures. Let AI transcribe, summarize, and organize your notes so you can focus on learning.
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={go}
-                className="bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-xl hover:bg-brand-700 transition-colors shadow-md shadow-brand-500/20 cursor-pointer text-sm inline-flex items-center gap-2"
-              >
-                Get Started Free
-                <FaArrowRight className="text-xs" />
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      
+      
+              
 
       {/* Footer */}
       <footer className="py-8 px-6 text-center text-sm text-surface-400 border-t border-surface-100 bg-surface-50">
