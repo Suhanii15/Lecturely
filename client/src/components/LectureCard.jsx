@@ -5,9 +5,9 @@ import { motion } from 'framer-motion'
 import { Mic, FileText, CheckCircle, Clock, Loader2, ArrowRight, Trash2, Pencil, Check, X } from "lucide-react"
 
 const statusConfig = {
-  completed: { icon: CheckCircle, label: "Completed", classes: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
-  processing: { icon: Loader2, label: "Processing", classes: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
-  uploaded: { icon: Clock, label: "Awaiting", classes: "bg-sky-500/10 text-sky-400 border-sky-500/20" },
+  completed: { icon: CheckCircle, label: "Completed", classes: "bg-emerald-400 text-white " },
+  processing: { icon: Loader2, label: "Processing", classes: "bg-yellow text-white" },
+  uploaded: { icon: Clock, label: "Awaiting", classes: "bg-sky-500 text-white" },
 };
 
 const LectureCard = ({ lecture, onDelete, onUpdate }) => {
@@ -65,7 +65,7 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="group relative bg-surface-100 border border-surface-300 rounded-2xl hover:border-surface-400 transition-all duration-200 overflow-hidden"
+      className="group relative bg-white-100 border border-zinc-400 rounded-xl hover:border-surface-700 transition-all duration-200 overflow-hidden"
     >
       <div className="p-3 md:p-5 flex items-center gap-2 md:gap-4 flex-wrap md:flex-nowrap">
         {/* Content */}
@@ -103,11 +103,11 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1 shrink-0 ml-auto md:ml-0">
+        <div className="flex items-center gap-1 shrink-0 w-full sm:w-auto ml-auto sm:ml-0 sm:justify-end mt-2 sm:mt-0">
           {lecture.status === "completed" ? (
             <button
               onClick={() => navigate(`/notes/${lecture._id}`)}
-              className="flex items-center gap-1.5 px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-brand-600/10 text-brand-500 text-xs font-semibold hover:bg-brand-600/20 transition-all duration-200 cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-brand-600 text-white text-xs font-semibold hover:bg-brand-700 transition-all duration-200 cursor-pointer whitespace-nowrap shadow-lg shadow-brand-500/20"
             >
               Notes
               <ArrowRight className="text-[9px]" />
