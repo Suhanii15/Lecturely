@@ -30,7 +30,7 @@ const Navbar = () => {
         </button>
         {user ? (
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-sm font-semibold shadow-sm">
+            <div className="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center text-sm font-semibold shadow-sm">
               {user.name?.[0] || 'U'}
             </div>
             <button onClick={() => { logoutUser(); navigate("/"); }}

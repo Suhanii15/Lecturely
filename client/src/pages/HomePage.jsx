@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
-import { FaMicrophone, FaBrain, FaStickyNote, FaArrowRight, FaStar, FaShieldAlt, FaBolt } from 'react-icons/fa'
+import { Mic, Brain, StickyNote, ArrowRight } from 'lucide-react'
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -25,7 +25,7 @@ const HomePage = () => {
   return (
     <>
       {/* Hero */}
-      <section className="min-h-screen flex flex-col bg-gradient-to-b from-surface-50 via-brand-50/20 to-surface-50">
+      <section className="min-h-screen flex flex-col bg-surface-50">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 text-center">
           <motion.div
@@ -38,7 +38,7 @@ const HomePage = () => {
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-surface-900 tracking-tight leading-tight">
               Turn Lecture Recordings into{' '}
-              <span className="bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent">
+              <span className="text-brand-600">
                 Clear Notes
               </span>
             </h1>
@@ -54,7 +54,7 @@ const HomePage = () => {
               className="mt-8 bg-brand-600 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-brand-700 transition-colors shadow-xl shadow-brand-500/25 cursor-pointer text-base inline-flex items-center gap-2"
             >
               Get Started Free
-              <FaArrowRight className="text-sm" />
+              <ArrowRight className="text-sm" />
             </motion.button>
 
            
@@ -80,9 +80,9 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {[
-              { img: upload, icon: FaMicrophone, title: "Upload Lecture", desc: "Upload your lecture recording or audio file in any common format.", delay: 0 },
-              { img: ai, icon: FaBrain, title: "AI Processing", desc: "Our AI transcribes and understands your lecture content with high accuracy.", delay: 0.15 },
-              { img: notes, icon: FaStickyNote, title: "Get Smart Notes", desc: "Receive clean notes, summaries, and key takeaways instantly.", delay: 0.3 },
+              { img: upload, icon: Mic, title: "Upload Lecture", desc: "Upload your lecture recording or audio file in any common format.", delay: 0 },
+              { img: ai, icon: Brain, title: "AI Processing", desc: "Our AI transcribes and understands your lecture content with high accuracy.", delay: 0.15 },
+              { img: notes, icon: StickyNote, title: "Get Smart Notes", desc: "Receive clean notes, summaries, and key takeaways instantly.", delay: 0.3 },
             ].map((item, i) => (
               <motion.div
                 key={i}

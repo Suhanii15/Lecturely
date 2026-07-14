@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { FaEnvelope, FaLock, FaSpinner, FaArrowRight, FaMicrophone, FaBrain, FaStickyNote } from 'react-icons/fa';
+import { Mail, Lock, Loader2, ArrowRight, Mic, Brain, StickyNote } from 'lucide-react';
 import { motion } from 'framer-motion';
 import logo from "../assets/Logo.png"
 
@@ -44,7 +44,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-surface-50 flex">
       {/* Brand panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 relative overflow-hidden items-center justify-center">
+      <div className="hidden lg:flex lg:w-1/2 bg-brand-700 relative overflow-hidden items-center justify-center">
         <div className="absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }} />
         <div className="absolute top-0 left-0 w-72 h-72 bg-brand-400/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
@@ -64,9 +64,9 @@ const LoginPage = () => {
           </p>
           <div className="mt-10 flex flex-col gap-4 max-w-xs mx-auto">
             {[
-              { icon: FaMicrophone, text: 'Upload any lecture recording' },
-              { icon: FaBrain, text: 'AI transcription & analysis' },
-              { icon: FaStickyNote, text: 'Get structured notes instantly' },
+              { icon: Mic, text: 'Upload any lecture recording' },
+              { icon: Brain, text: 'AI transcription & analysis' },
+              { icon: StickyNote, text: 'Get structured notes instantly' },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-3 text-left">
                 <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
@@ -115,7 +115,7 @@ const LoginPage = () => {
             <div>
               <label className="block text-sm font-medium text-surface-700 mb-1.5">Email</label>
               <div className="relative">
-                <FaEnvelope className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 text-sm pointer-events-none" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 text-sm pointer-events-none" />
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   className="w-full pl-10 pr-3.5 py-2.5 border border-surface-200 rounded-xl text-sm text-surface-900 bg-surface-50 placeholder-surface-400 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"
@@ -125,7 +125,7 @@ const LoginPage = () => {
             <div>
               <label className="block text-sm font-medium text-surface-700 mb-1.5">Password</label>
               <div className="relative">
-                <FaLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 text-sm pointer-events-none" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 text-sm pointer-events-none" />
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="w-full pl-10 pr-3.5 py-2.5 border border-surface-200 rounded-xl text-sm text-surface-900 bg-surface-50 placeholder-surface-400 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"
@@ -140,9 +140,9 @@ const LoginPage = () => {
               className="w-full bg-brand-600 text-white font-semibold py-3 rounded-xl hover:bg-brand-700 disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 cursor-pointer text-sm"
             >
               {loading ? (
-                <><FaSpinner className="animate-spin" /> {isLogin ? 'Signing in...' : 'Creating account...'}</>
+                <><Loader2 className="animate-spin" /> {isLogin ? 'Signing in...' : 'Creating account...'}</>
               ) : (
-                <>{isLogin ? 'Sign In' : 'Create Account'} <FaArrowRight className="text-xs" /></>
+                <>{isLogin ? 'Sign In' : 'Create Account'} <ArrowRight className="text-xs" /></>
               )}
             </motion.button>
           </form>

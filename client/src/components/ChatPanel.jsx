@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaRobot, FaUser, FaPaperPlane, FaSpinner, FaExclamationCircle, FaChevronUp, FaChevronDown, FaBrain } from 'react-icons/fa';
+import { Bot, User, Send, Loader2, AlertCircle, ChevronUp, ChevronDown, Brain } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
 
@@ -96,8 +96,8 @@ const ChatPanel = ({ lectureId, notesId, isCompleted }) => {
       <button onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-5 hover:bg-surface-200/50 transition-colors cursor-pointer">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-sm">
-            <FaBrain className="text-white text-sm" />
+          <div className="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center shadow-sm">
+            <Brain className="text-white text-sm" />
           </div>
           <div className="text-left">
             <h3 className="text-sm font-bold text-surface-900">Ask Your Notes</h3>
@@ -105,7 +105,7 @@ const ChatPanel = ({ lectureId, notesId, isCompleted }) => {
           </div>
         </div>
         <div className="w-7 h-7 rounded-lg bg-surface-200 flex items-center justify-center">
-          {open ? <FaChevronUp className="text-[10px] text-surface-500" /> : <FaChevronDown className="text-[10px] text-surface-500" />}
+          {open ? <ChevronUp className="text-[10px] text-surface-500" /> : <ChevronDown className="text-[10px] text-surface-500" />}
         </div>
       </button>
 
@@ -122,14 +122,14 @@ const ChatPanel = ({ lectureId, notesId, isCompleted }) => {
               <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 scroll-smooth">
                 {loadingHistory && (
                   <div className="flex items-center justify-center py-10">
-                    <FaSpinner className="text-brand-500 text-lg animate-spin" />
+                    <Loader2 className="text-brand-500 text-lg animate-spin" />
                   </div>
                 )}
 
                 {!loadingHistory && messages.length === 0 && (
                   <div className="text-center py-10">
                     <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mx-auto mb-4">
-                      <FaRobot className="text-brand-400 text-xl" />
+                      <Bot className="text-brand-400 text-xl" />
                     </div>
                     <p className="text-sm font-semibold text-surface-700 mb-1">Ask anything about this lecture</p>
                     <p className="text-xs text-surface-400 max-w-xs mx-auto">
@@ -143,11 +143,11 @@ const ChatPanel = ({ lectureId, notesId, isCompleted }) => {
                     <div className={`shrink-0 w-8 h-8 rounded-xl flex items-center justify-center ${
                       msg.role === 'user'
                         ? 'bg-brand-100'
-                        : 'bg-gradient-to-br from-brand-500 to-brand-600'
+                        : 'bg-brand-500'
                     }`}>
                       {msg.role === 'user'
-                        ? <FaUser className="text-brand-500 text-[11px]" />
-                        : <FaRobot className="text-white text-[11px]" />
+                        ? <User className="text-brand-500 text-[11px]" />
+                        : <Bot className="text-white text-[11px]" />
                       }
                     </div>
                     <div className={`max-w-[80%] ${msg.role === 'user' ? 'bg-brand-600 text-white' : 'bg-surface-50 text-surface-700 border border-surface-200'} rounded-2xl px-4 py-2.5`}>
@@ -162,18 +162,18 @@ const ChatPanel = ({ lectureId, notesId, isCompleted }) => {
 
                 {sending && (
                   <div className="flex gap-3">
-                    <div className="shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
-                      <FaRobot className="text-white text-[11px]" />
+                    <div className="shrink-0 w-8 h-8 rounded-xl bg-brand-500 flex items-center justify-center">
+                      <Bot className="text-white text-[11px]" />
                     </div>
                     <div className="bg-surface-50 border border-surface-200 rounded-2xl px-4 py-3">
-                      <FaSpinner className="text-brand-500 text-sm animate-spin" />
+                      <Loader2 className="text-brand-500 text-sm animate-spin" />
                     </div>
                   </div>
                 )}
 
                 {error && (
                   <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
-                    <FaExclamationCircle className="text-red-400 text-xs shrink-0 mt-0.5" />
+                    <AlertCircle className="text-red-400 text-xs shrink-0 mt-0.5" />
                     <p className="text-xs text-red-600">{error}</p>
                   </div>
                 )}
@@ -190,8 +190,8 @@ const ChatPanel = ({ lectureId, notesId, isCompleted }) => {
                   <button onClick={sendMessage} disabled={sending || !input.trim() || !isCompleted}
                     className="w-10 h-10 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:bg-surface-300 flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0">
                     {sending
-                      ? <FaSpinner className="text-white text-sm animate-spin" />
-                      : <FaPaperPlane className="text-white text-[11px]" />
+                      ? <Loader2 className="text-white text-sm animate-spin" />
+                      : <Send className="text-white text-[11px]" />
                     }
                   </button>
                 </div>

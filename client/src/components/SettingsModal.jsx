@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from "../api";
-import { FaTimes, FaEnvelope, FaBookOpen, FaSignOutAlt, FaSave } from "react-icons/fa";
+import { X, Mail, BookOpen, LogOut, Save } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
 
 const backdropVariants = {
@@ -104,7 +104,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
               </div>
               <button onClick={onClose}
                 className="w-8 h-8 rounded-lg bg-surface-100 flex items-center justify-center text-surface-500 hover:bg-surface-200 transition-colors cursor-pointer">
-                <FaTimes className="text-xs" />
+                <X className="text-xs" />
               </button>
             </div>
 
@@ -113,7 +113,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
               {/* Email */}
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-surface-700 mb-2">
-                  <FaEnvelope className="text-surface-400" />
+                  <Mail className="text-surface-400" />
                   Contact Email
                 </label>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
@@ -125,7 +125,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
               {/* Notes format */}
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-surface-700 mb-3">
-                  <FaBookOpen className="text-surface-400" />
+                  <BookOpen className="text-surface-400" />
                   Notes Format
                 </label>
                 <div className="flex gap-3">
@@ -149,7 +149,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
               {/* Logout */}
               <div className="flex items-center justify-between p-4 rounded-xl bg-red-500/5 border border-red-500/10">
                 <div className="flex items-center gap-3">
-                  <FaSignOutAlt className="text-red-400" />
+                  <LogOut className="text-red-400" />
                   <div>
                     <p className="text-sm font-semibold text-red-600">Account</p>
                     <p className="text-xs text-red-400">Sign out of your session</p>
@@ -169,7 +169,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
                 disabled={loading}
                 className="w-full bg-brand-600 text-white font-semibold py-3 rounded-xl hover:bg-brand-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer transition-all text-sm active:scale-[0.99]"
               >
-                {loading ? <><FaSave className="animate-spin" /> Saving...</> : <><FaSave /> Save Changes</>}
+                {loading ? <><Save className="animate-spin" /> Saving...</> : <><Save /> Save Changes</>}
               </button>
             </div>
           </motion.div>

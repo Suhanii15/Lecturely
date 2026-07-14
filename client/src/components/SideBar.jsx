@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink } from "react-router-dom"
 import SettingsModal from './SettingsModal'
-import { MdSpaceDashboard } from "react-icons/md";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import { IoSettingsSharp, IoLogOutOutline } from "react-icons/io5";
+import { LayoutDashboard, CloudUpload, Settings, LogOut } from "lucide-react";
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -33,11 +31,11 @@ const SideBar = () => {
 
       {/* Nav */}
       <NavLink to="/dashboard" className={linkClass} end>
-        <MdSpaceDashboard className={iconClass} />
+        <LayoutDashboard className={iconClass} />
         Dashboard
       </NavLink>
       <NavLink to="/upload" className={linkClass}>
-        <FaCloudUploadAlt className={iconClass} />
+        <CloudUpload className={iconClass} />
         Upload
       </NavLink>
 
@@ -45,7 +43,7 @@ const SideBar = () => {
         onClick={() => setSettings(true)}
         className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-surface-500 hover:bg-surface-100 hover:text-surface-700 transition-all duration-200 w-full text-left cursor-pointer"
       >
-        <IoSettingsSharp className={iconClass} />
+        <Settings className={iconClass} />
         Settings
       </button>
 
@@ -53,7 +51,7 @@ const SideBar = () => {
       <div className="mt-auto">
         {user && (
           <div className="flex items-center gap-3 px-3 pb-4 mb-4 border-b border-surface-100">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-sm font-bold shadow-sm shrink-0">
+            <div className="w-9 h-9 rounded-full bg-brand-500 text-white flex items-center justify-center text-sm font-bold shadow-sm shrink-0">
               {user.name?.[0] || 'U'}
             </div>
             <div className="min-w-0">
@@ -67,7 +65,7 @@ const SideBar = () => {
           onClick={() => { logoutUser(); navigate("/login"); }}
           className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all duration-200 w-full text-left cursor-pointer"
         >
-          <IoLogOutOutline className="text-lg" />
+          <LogOut className="text-lg" />
           Sign Out
         </button>
         </div>

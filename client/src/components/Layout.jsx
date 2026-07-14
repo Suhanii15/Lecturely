@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { FaBars } from 'react-icons/fa';
+import { Menu } from 'lucide-react';
 import SideBar from './SideBar';
 import logo from "../assets/Logo.png";
 
@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
       <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-surface-100 bg-surface-50/80 backdrop-blur-xl sticky top-0 z-20">
         <button onClick={() => setSidebarOpen(true)}
           className="w-9 h-9 rounded-xl bg-surface-100 flex items-center justify-center hover:bg-surface-200 transition-colors cursor-pointer">
-          <FaBars className="text-surface-500 text-sm" />
+          <Menu className="text-surface-500 text-sm" />
         </button>
         <div className="flex items-center gap-2">
           <img src={logo} className="w-7 h-7" alt="Lecturely" />

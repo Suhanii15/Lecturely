@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from "../api";
 import { motion } from 'framer-motion'
-import { FaMicrophone, FaFileAlt, FaCheckCircle, FaClock, FaSpinner, FaArrowRight, FaTrashAlt, FaEdit, FaCheck, FaTimes } from "react-icons/fa"
+import { Mic, FileText, CheckCircle, Clock, Loader2, ArrowRight, Trash2, Pencil, Check, X } from "lucide-react"
 
 const statusConfig = {
-  completed: { icon: FaCheckCircle, label: "Completed", classes: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
-  processing: { icon: FaSpinner, label: "Processing", classes: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
-  uploaded: { icon: FaClock, label: "Awaiting", classes: "bg-sky-500/10 text-sky-400 border-sky-500/20" },
+  completed: { icon: CheckCircle, label: "Completed", classes: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
+  processing: { icon: Loader2, label: "Processing", classes: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
+  uploaded: { icon: Clock, label: "Awaiting", classes: "bg-sky-500/10 text-sky-400 border-sky-500/20" },
 };
 
 const LectureCard = ({ lecture, onDelete, onUpdate }) => {
@@ -65,18 +65,9 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="group relative bg-surface-100 border border-surface-200 rounded-2xl hover:border-surface-300 transition-all duration-200 overflow-hidden"
+      className="group relative bg-surface-100 border border-surface-300 rounded-2xl hover:border-surface-400 transition-all duration-200 overflow-hidden"
     >
       <div className="p-3 md:p-5 flex items-center gap-2 md:gap-4 flex-wrap md:flex-nowrap">
-        {/* Icon */}
-        <div className={`w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-base ${status.classes}`}>
-          {lecture.status === "processing" ? (
-            <FaSpinner className="animate-spin" />
-          ) : (
-            <Icon />
-          )}
-        </div>
-
         {/* Content */}
         <div className="flex-1 min-w-0">
           {isEditing ? (
@@ -89,8 +80,8 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
                 onKeyDown={(e) => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') handleCancel(); }}
                 className="flex-1 bg-surface-200 border border-surface-300 rounded-lg px-3 py-1.5 text-sm font-semibold text-surface-900 outline-none focus:border-brand-500/40"
               />
-              <button onClick={handleSave} className="p-1.5 rounded-lg bg-surface-200 hover:bg-surface-300 text-surface-600 transition-colors cursor-pointer"><FaCheck className="text-[10px]" /></button>
-              <button onClick={handleCancel} className="p-1.5 rounded-lg bg-surface-200 hover:bg-surface-300 text-surface-600 transition-colors cursor-pointer"><FaTimes className="text-[10px]" /></button>
+              <button onClick={handleSave} className="p-1.5 rounded-lg bg-surface-200 hover:bg-surface-300 text-surface-600 transition-colors cursor-pointer"><Check className="text-[10px]" /></button>
+              <button onClick={handleCancel} className="p-1.5 rounded-lg bg-surface-200 hover:bg-surface-300 text-surface-600 transition-colors cursor-pointer"><X className="text-[10px]" /></button>
             </div>
           ) : (
             <h3 className="text-sm font-bold text-surface-900 truncate leading-tight">{lecture.title || "Untitled"}</h3>
@@ -119,7 +110,7 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
               className="flex items-center gap-1.5 px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-brand-600/10 text-brand-500 text-xs font-semibold hover:bg-brand-600/20 transition-all duration-200 cursor-pointer whitespace-nowrap"
             >
               Notes
-              <FaArrowRight className="text-[9px]" />
+              <ArrowRight className="text-[9px]" />
             </button>
           ) : (
             <span className="px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-surface-200 text-surface-400 text-xs font-semibold cursor-not-allowed select-none whitespace-nowrap">
@@ -132,7 +123,7 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
             className="p-1.5 md:p-2 rounded-xl text-surface-400 hover:text-surface-600 hover:bg-surface-200 transition-all duration-200 opacity-0 group-hover:opacity-100 cursor-pointer"
             title="Rename"
           >
-            <FaEdit className="text-[10px] md:text-xs" />
+            <Pencil className="text-[10px] md:text-xs" />
           </button>
           <button
             onClick={handleDelete}
@@ -140,7 +131,7 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
             className="p-1.5 md:p-2 rounded-xl text-surface-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 opacity-0 group-hover:opacity-100 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
             title="Delete"
           >
-            <FaTrashAlt className="text-[10px] md:text-xs" />
+            <Trash2 className="text-[10px] md:text-xs" />
           </button>
         </div>
       </div>

@@ -2,10 +2,10 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  FaArrowLeft, FaFileAlt, FaRegClock, FaSpinner, FaInfoCircle, FaMicrophone,
-  FaLightbulb, FaListUl, FaQuoteRight, FaUser, FaBookOpen,
-  FaFilePdf, FaFileDownload, FaEdit, FaSave, FaTimes, FaHighlighter,
-} from 'react-icons/fa';
+  ArrowLeft, FileText, Clock, Loader2, Info, Mic,
+  Lightbulb, List, Quote, BookOpen,
+  Download, Pencil, Save, X, Highlighter,
+} from 'lucide-react';
 import api from '../api';
 import logo from "../assets/Logo.png";
 
@@ -164,7 +164,6 @@ const Notes = () => {
       lines.push('-'.repeat(40));
       notes.chapters.forEach((ch, i) => {
         lines.push(`\n${ch.headline || `Chapter ${i + 1}`}`);
-        if (ch.start != null) lines.push(`  [${Math.floor(ch.start / 60)}:${String(ch.start % 60).padStart(2, '0')}]`);
         lines.push(`  ${ch.summary}`);
       });
       lines.push('');
@@ -174,11 +173,6 @@ const Notes = () => {
       lines.push('-'.repeat(40));
       lines.push(`\n${notes.content}`);
       lines.push('');
-    }
-    if (notes?.speakers?.length) {
-      lines.push('SPEAKERS');
-      lines.push('-'.repeat(40));
-      notes.speakers.forEach((sp) => { lines.push(`\n${sp.speaker || 'Speaker'}: ${sp.text}`); });
     }
     return lines.join('\n');
   };
@@ -213,7 +207,7 @@ const Notes = () => {
       <div className="min-h-screen bg-surface-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mx-auto mb-5">
-            <FaSpinner className="text-brand-500 text-xl animate-spin" />
+            <Loader2 className="text-brand-500 text-xl animate-spin" />
           </div>
           <div className="skeleton h-4 w-40 mx-auto mb-2" />
           <div className="skeleton h-3 w-28 mx-auto" />
@@ -227,7 +221,7 @@ const Notes = () => {
       <div className="min-h-screen bg-surface-50 flex items-center justify-center">
         <div className="text-center max-w-sm">
           <div className="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-5">
-            <FaInfoCircle className="text-red-400 text-2xl" />
+            <Info className="text-red-400 text-2xl" />
           </div>
           <h2 className="text-xl font-bold text-surface-900 mb-1.5">Lecture not found</h2>
           <p className="text-sm text-surface-500 mb-6">{error || "The lecture you're looking for doesn't exist."}</p>
@@ -257,7 +251,7 @@ const Notes = () => {
           <button onClick={() => navigate('/dashboard')}
             className="flex items-center gap-2 text-sm font-medium text-surface-500 hover:text-surface-700 transition-colors cursor-pointer group">
             <div className="w-7 h-7 rounded-lg bg-surface-100 flex items-center justify-center group-hover:bg-surface-200 transition-colors">
-              <FaArrowLeft className="text-[10px]" />
+              <ArrowLeft className="text-[10px]" />
             </div>
             Back
           </button>
@@ -266,16 +260,16 @@ const Notes = () => {
               <>
                 <button onClick={exportPdf}
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 hover:bg-surface-200 px-3 py-1.5 rounded-full transition-colors cursor-pointer">
-                  <FaFilePdf className="text-[10px]" /> PDF
+                  <FileText className="text-[10px]" /> PDF
                 </button>
                 <button onClick={exportTxt}
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 hover:bg-surface-200 px-3 py-1.5 rounded-full transition-colors cursor-pointer">
-                  <FaFileDownload className="text-[10px]" /> TXT
+                  <Download className="text-[10px]" /> TXT
                 </button>
               </>
             )}
             <span className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 px-3 py-1.5 rounded-full">
-              <FaRegClock className="text-[10px]" />
+              <Clock className="text-[10px]" />
               {lecture.createdAt
                 ? new Date(lecture.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
                 : ''}
@@ -286,7 +280,7 @@ const Notes = () => {
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 md:mb-10">
           <div className="flex items-start gap-3 mb-3">
             <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-brand-50 flex items-center justify-center shrink-0 mt-0.5">
-              <FaBookOpen className="text-brand-500 text-xs md:text-sm" />
+              <BookOpen className="text-brand-500 text-xs md:text-sm" />
             </div>
             <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-surface-900 break-words min-w-0">{lecture.title}</h1>
           </div>
@@ -296,7 +290,7 @@ const Notes = () => {
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 md:p-8 text-center">
             <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto mb-5">
-              <FaSpinner className="text-2xl text-amber-400 animate-spin" />
+              <Loader2 className="text-2xl text-amber-400 animate-spin" />
             </div>
             <h2 className="text-lg font-bold text-surface-900 mb-1.5">Processing your lecture</h2>
             <p className="text-sm text-surface-500 mb-1">{lecture.progressMessage || 'This may take a few minutes depending on the audio length.'}</p>
@@ -308,7 +302,7 @@ const Notes = () => {
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             className="bg-red-500/10 border border-red-500/20 rounded-2xl p-8 text-center">
             <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-5">
-              <FaInfoCircle className="text-2xl text-red-400" />
+              <Info className="text-2xl text-red-400" />
             </div>
             <h2 className="text-lg font-bold text-surface-900 mb-1.5">Processing failed</h2>
             <p className="text-sm text-surface-500 mb-6">Something went wrong. Please try uploading again.</p>
@@ -325,27 +319,21 @@ const Notes = () => {
             {notes.chapters && notes.chapters.length > 0 && (
               <section>
                 <div className="flex items-center gap-2 mb-4">
-                  <FaListUl className="text-brand-500 text-xs" />
+                  <List className="text-brand-500 text-xs" />
                   <h2 className="text-sm font-bold text-surface-900 uppercase tracking-wider">Chapters</h2>
                   <span className="text-xs text-surface-400">({notes.chapters.length})</span>
                 </div>
                 <div className="space-y-3">
                   {notes.chapters.map((ch, idx) => (
                     <div key={idx}
-                      className="bg-surface-100 rounded-2xl border border-surface-200 p-5 border-l-[3px] border-l-brand-500 hover:border-surface-300 transition-all">
+                      className="bg-surface-100 rounded-2xl border border-surface-200 p-5 hover:border-surface-300 transition-all">
                       <div className="flex items-start gap-3">
                         <div className="w-9 h-9 rounded-xl bg-brand-50 flex items-center justify-center shrink-0 mt-0.5">
-                          <FaFileAlt className="text-xs text-brand-500" />
+                          <FileText className="text-xs text-brand-500" />
                         </div>
                         <div className="min-w-0 flex-1">
                           <h3 className="text-base font-bold text-surface-900 mb-1">{ch.headline || `Chapter ${idx + 1}`}</h3>
                           <p className="text-sm text-surface-600 leading-relaxed">{ch.summary}</p>
-                          {ch.start != null && (
-                            <span className="inline-flex items-center gap-1 mt-2 text-[11px] font-medium text-surface-400 bg-surface-200 px-2 py-0.5 rounded-full">
-                              <FaRegClock className="text-[9px]" />
-                              {Math.floor(ch.start / 60)}:{String(ch.start % 60).padStart(2, '0')}
-                            </span>
-                          )}
                         </div>
                       </div>
                     </div>
@@ -358,13 +346,13 @@ const Notes = () => {
               <section>
                 <div className="flex items-center justify-between gap-2 mb-4">
                   <div className="flex items-center gap-2">
-                    <FaLightbulb className="text-amber-400 text-xs" />
+                    <Lightbulb className="text-amber-400 text-xs" />
                     <h2 className="text-sm font-bold text-surface-900 uppercase tracking-wider">Notes</h2>
                   </div>
                   {!isEditing && (
                     <button onClick={startEditing}
                       className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 hover:bg-surface-200 px-3 py-1.5 rounded-full transition-colors cursor-pointer">
-                      <FaEdit className="text-[10px]" /> Edit
+                      <Pencil className="text-[10px]" /> Edit
                     </button>
                   )}
                 </div>
@@ -377,11 +365,11 @@ const Notes = () => {
                     <div className="flex items-center gap-2 justify-end">
                       <button onClick={cancelEdit}
                         className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 bg-surface-100 hover:bg-surface-200 px-4 py-2 rounded-xl transition-colors cursor-pointer">
-                        <FaTimes className="text-[10px]" /> Cancel
+                        <X className="text-[10px]" /> Cancel
                       </button>
                       <button onClick={saveEdit} disabled={saving}
                         className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-xl transition-colors shadow-sm cursor-pointer disabled:opacity-50">
-                        {saving ? <FaSpinner className="text-[10px] animate-spin" /> : <FaSave className="text-[10px]" />}
+                        {saving ? <Loader2 className="text-[10px] animate-spin" /> : <Save className="text-[10px]" />}
                         {saving ? 'Saving...' : 'Save'}
                       </button>
                     </div>
@@ -410,7 +398,7 @@ const Notes = () => {
                         <div className="bg-surface-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2">
                           <button onClick={addHighlight}
                             className="flex items-center gap-1 hover:text-amber-300 transition-colors cursor-pointer">
-                            <FaHighlighter className="text-[10px]" /> Highlight
+                            <Highlighter className="text-[10px]" /> Highlight
                           </button>
                         </div>
                       </div>
@@ -422,7 +410,7 @@ const Notes = () => {
                         <div className="bg-surface-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2">
                           <button onClick={() => removeHighlight(clickHL.id)}
                             className="flex items-center gap-1 hover:text-red-300 transition-colors cursor-pointer whitespace-nowrap">
-                            <FaTimes className="text-[10px]" /> Remove highlight
+                            <X className="text-[10px]" /> Remove highlight
                           </button>
                         </div>
                       </div>
@@ -432,47 +420,6 @@ const Notes = () => {
               </section>
             )}
 
-            {notes.speakers && notes.speakers.length > 0 && (
-              <section>
-                <div className="flex items-center gap-2 mb-4">
-                  <FaUser className="text-sky-400 text-xs" />
-                  <h2 className="text-sm font-bold text-surface-900 uppercase tracking-wider">Speakers</h2>
-                  <span className="text-xs text-surface-400">({notes.speakers.length})</span>
-                </div>
-                <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
-                  {notes.speakers.map((sp, idx) => (
-                    <div key={idx}
-                      className="bg-surface-100 rounded-xl border border-surface-200 p-4 flex items-start gap-3 hover:border-surface-300 transition-colors">
-                      <span className="shrink-0 text-[11px] font-bold text-transparent bg-clip-text bg-gradient-to-br from-brand-500 to-brand-400 bg-brand-50 px-2.5 py-1 rounded-lg mt-0.5">
-                        {sp.speaker || `Speaker ${idx + 1}`}
-                      </span>
-                      <p className="text-sm text-surface-600 leading-relaxed">{sp.text}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-surface-200">
-              <span className="inline-flex items-center gap-1.5 text-xs text-surface-400 bg-surface-100 px-3 py-1.5 rounded-full">
-                <FaRegClock className="text-[10px]" />
-                {notes.chapters?.length || 0} chapters
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-xs text-surface-400 bg-surface-100 px-3 py-1.5 rounded-full">
-                <FaMicrophone className="text-[10px]" />
-                {notes.speakers?.length || 0} speakers
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-xs text-surface-400 bg-surface-100 px-3 py-1.5 rounded-full">
-                <FaQuoteRight className="text-[10px]" />
-                {notes.content?.length || 0} chars
-              </span>
-              {notes.highlights?.length > 0 && (
-                <span className="inline-flex items-center gap-1.5 text-xs text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full">
-                  <FaHighlighter className="text-[10px]" />
-                  {notes.highlights.length} highlights
-                </span>
-              )}
-            </div>
           </motion.div>
         )}
       </div>

@@ -5,7 +5,7 @@ import LectureCard from './LectureCard';
 import api from "../api";
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
-import { FaMicrophone, FaSpinner, FaPlus, FaSearch } from "react-icons/fa";
+import { Mic, Plus, Search } from "lucide-react";
 
 const container = {
   animate: { transition: { staggerChildren: 0.06 } },
@@ -90,7 +90,7 @@ const Dashboard = () => {
             onClick={() => navigate("/upload")}
             className="bg-brand-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20 cursor-pointer flex items-center gap-2 shrink-0"
           >
-            <FaPlus className="text-[10px]" />
+            <Plus className="text-[10px]" />
             New Upload
           </motion.button>
         </div>
@@ -99,7 +99,7 @@ const Dashboard = () => {
       {/* Search */}
       <motion.div variants={fadeSlideUp} className="mb-6 md:mb-8 w-full max-w-md">
         <div className="relative">
-          <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400 text-sm pointer-events-none" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400 text-sm pointer-events-none" />
           <input
             type="text"
             value={search}
@@ -130,7 +130,7 @@ const Dashboard = () => {
         ) : filteredLectures.length === 0 ? (
           <div className="text-center py-20">
             <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-surface-100 flex items-center justify-center border border-surface-200">
-              {search ? <FaSearch className="text-surface-400 text-xl" /> : <FaMicrophone className="text-surface-400 text-xl" />}
+              {search ? <Search className="text-surface-400 text-xl" /> : <Mic className="text-surface-400 text-xl" />}
             </div>
             <h3 className="text-lg font-bold text-surface-900 mb-1">
               {search ? "No results found" : "No lectures yet"}

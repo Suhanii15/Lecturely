@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaCloudUploadAlt, FaFileAudio, FaTrashAlt, FaArrowRight, FaSpinner, FaCheckCircle } from "react-icons/fa";
+import { CloudUpload, FileAudio, Trash2, ArrowRight, Loader2, CheckCircle } from "lucide-react";
 
 const Upload = () => {
   const [file, setFile] = useState(null);
@@ -130,7 +130,7 @@ const Upload = () => {
             {!file ? (
               <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-3 md:gap-4">
                 <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-brand-50 flex items-center justify-center">
-                  <FaCloudUploadAlt className="text-xl md:text-2xl text-brand-500" />
+                  <CloudUpload className="text-xl md:text-2xl text-brand-500" />
                 </div>
                 <div>
                   <p className="text-surface-700 font-medium">Drag & drop your lecture audio here</p>
@@ -145,14 +145,14 @@ const Upload = () => {
             ) : (
               <motion.div key="file" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-3 md:gap-4">
                 <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-brand-50 flex items-center justify-center">
-                  <FaFileAudio className="text-xl md:text-2xl text-brand-500" />
+                  <FileAudio className="text-xl md:text-2xl text-brand-500" />
                 </div>
                 <div className="max-w-full px-4">
                   <p className="text-surface-800 font-medium text-sm md:text-base truncate max-w-full">{file.name}</p>
                   <p className="text-sm text-surface-400">{(file.size / (1024 * 1024)).toFixed(1)} MB</p>
                 </div>
                 <button onClick={removeFile} className="text-xs text-red-500 hover:text-red-600 flex items-center gap-1 transition-colors cursor-pointer">
-                  <FaTrashAlt /> Remove file
+                  <Trash2 /> Remove file
                 </button>
               </motion.div>
             )}
@@ -177,9 +177,9 @@ const Upload = () => {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-surface-500 flex items-center gap-2">
                       {uploadProgress >= 100 ? (
-                        <FaCheckCircle className="text-emerald-400" />
+                        <CheckCircle className="text-emerald-400" />
                       ) : (
-                        <FaSpinner className="animate-spin text-brand-500" />
+                        <Loader2 className="animate-spin text-brand-500" />
                       )}
                       {uploadProgress < 70 ? "Uploading to cloud..." : uploadProgress < 85 ? "Processing..." : "Starting transcription..."}
                     </span>
@@ -187,7 +187,7 @@ const Upload = () => {
                   </div>
                   <div className="w-full bg-surface-100 rounded-full h-2 overflow-hidden">
                     <motion.div
-                      className="h-full bg-gradient-to-r from-brand-500 to-brand-400 rounded-full"
+                      className="h-full bg-brand-500 rounded-full"
                       initial={{ width: 0 }}
                       animate={{ width: `${uploadProgress}%` }}
                       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -204,9 +204,9 @@ const Upload = () => {
                 className="w-full bg-brand-600 text-white font-semibold py-3 rounded-xl hover:bg-brand-700 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer text-sm active:scale-[0.99]"
               >
                 {loading ? (
-                  <><FaSpinner className="animate-spin" /> {uploadProgress >= 100 ? 'Redirecting...' : 'Uploading...'}</>
+                  <><Loader2 className="animate-spin" /> {uploadProgress >= 100 ? 'Redirecting...' : 'Uploading...'}</>
                 ) : (
-                  <><FaArrowRight /> Upload & Process</>
+                  <><ArrowRight /> Upload & Process</>
                 )}
               </motion.button>
             </motion.div>
