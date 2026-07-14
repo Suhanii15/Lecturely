@@ -105,10 +105,10 @@ const Upload = () => {
   };
 
   return (
-    <div className="flex-1 p-6 md:p-8">
-      <div className="max-w-2xl">
-        <div className="mb-6">
-          <h1 className="text-xl font-bold text-surface-900">Upload Lecture</h1>
+    <div className="flex-1 min-w-0 p-4 md:p-8">
+      <div className="max-w-2xl w-full mx-auto">
+        <div className="mb-5 md:mb-6">
+          <h1 className="text-lg md:text-xl font-bold text-surface-900">Upload Lecture</h1>
           <p className="text-sm text-surface-400 mt-0.5">Upload your lecture audio and let AI do the rest</p>
         </div>
 
@@ -118,7 +118,7 @@ const Upload = () => {
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className={`relative rounded-2xl border-2 border-dashed p-12 text-center transition-all duration-200 ${
+          className={`relative rounded-2xl border-2 border-dashed p-8 md:p-12 text-center transition-all duration-200 ${
             dragOver
               ? "border-brand-400 bg-brand-50/50 scale-[1.01]"
               : "border-surface-200 bg-surface-50/50 hover:border-surface-300"
@@ -128,9 +128,9 @@ const Upload = () => {
 
           <AnimatePresence mode="wait">
             {!file ? (
-              <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center">
-                  <FaCloudUploadAlt className="text-2xl text-brand-500" />
+              <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-3 md:gap-4">
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-brand-50 flex items-center justify-center">
+                  <FaCloudUploadAlt className="text-xl md:text-2xl text-brand-500" />
                 </div>
                 <div>
                   <p className="text-surface-700 font-medium">Drag & drop your lecture audio here</p>
@@ -143,12 +143,12 @@ const Upload = () => {
                 <p className="text-xs text-surface-400">MP3, WAV, M4A &bull; Up to 1GB (5+ hours)</p>
               </motion.div>
             ) : (
-              <motion.div key="file" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center">
-                  <FaFileAudio className="text-2xl text-brand-500" />
+              <motion.div key="file" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col items-center gap-3 md:gap-4">
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-brand-50 flex items-center justify-center">
+                  <FaFileAudio className="text-xl md:text-2xl text-brand-500" />
                 </div>
-                <div>
-                  <p className="text-surface-800 font-medium">{file.name}</p>
+                <div className="max-w-full px-4">
+                  <p className="text-surface-800 font-medium text-sm md:text-base truncate max-w-full">{file.name}</p>
                   <p className="text-sm text-surface-400">{(file.size / (1024 * 1024)).toFixed(1)} MB</p>
                 </div>
                 <button onClick={removeFile} className="text-xs text-red-500 hover:text-red-600 flex items-center gap-1 transition-colors cursor-pointer">

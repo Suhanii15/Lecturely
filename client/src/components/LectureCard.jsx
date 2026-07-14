@@ -67,7 +67,7 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
       transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
       className="group relative bg-surface-100 border border-surface-200 rounded-2xl hover:border-surface-300 transition-all duration-200 overflow-hidden"
     >
-      <div className="p-4 md:p-5 flex items-center gap-4">
+      <div className="p-3 md:p-5 flex items-center gap-2 md:gap-4 flex-wrap md:flex-nowrap">
         {/* Icon */}
         <div className={`w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-base ${status.classes}`}>
           {lecture.status === "processing" ? (
@@ -105,42 +105,42 @@ const LectureCard = ({ lecture, onDelete, onUpdate }) => {
             {lecture.progressMessage && lecture.status === "processing" && (
               <>
                 <span className="text-surface-300">·</span>
-                <span className="text-[11px] text-surface-500 truncate">{lecture.progressMessage}</span>
+                <span className="text-[11px] text-surface-500 truncate min-w-0 max-w-[120px] md:max-w-[200px]">{lecture.progressMessage}</span>
               </>
             )}
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-1 shrink-0 ml-auto md:ml-0">
           {lecture.status === "completed" ? (
             <button
               onClick={() => navigate(`/notes/${lecture._id}`)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-600/10 text-brand-500 text-xs font-semibold hover:bg-brand-600/20 transition-all duration-200 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-brand-600/10 text-brand-500 text-xs font-semibold hover:bg-brand-600/20 transition-all duration-200 cursor-pointer whitespace-nowrap"
             >
               Notes
               <FaArrowRight className="text-[9px]" />
             </button>
           ) : (
-            <span className="px-4 py-2 rounded-xl bg-surface-200 text-surface-400 text-xs font-semibold cursor-not-allowed select-none">
+            <span className="px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-surface-200 text-surface-400 text-xs font-semibold cursor-not-allowed select-none whitespace-nowrap">
               {lecture.status === "processing" ? "Processing" : "Queued"}
             </span>
           )}
 
           <button
             onClick={() => setIsEditing(true)}
-            className="p-2 rounded-xl text-surface-400 hover:text-surface-600 hover:bg-surface-200 transition-all duration-200 opacity-0 group-hover:opacity-100 cursor-pointer"
+            className="p-1.5 md:p-2 rounded-xl text-surface-400 hover:text-surface-600 hover:bg-surface-200 transition-all duration-200 opacity-0 group-hover:opacity-100 cursor-pointer"
             title="Rename"
           >
-            <FaEdit className="text-xs" />
+            <FaEdit className="text-[10px] md:text-xs" />
           </button>
           <button
             onClick={handleDelete}
             disabled={isDeleting || lecture.status === "processing"}
-            className="p-2 rounded-xl text-surface-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 opacity-0 group-hover:opacity-100 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-1.5 md:p-2 rounded-xl text-surface-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 opacity-0 group-hover:opacity-100 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
             title="Delete"
           >
-            <FaTrashAlt className="text-xs" />
+            <FaTrashAlt className="text-[10px] md:text-xs" />
           </button>
         </div>
       </div>

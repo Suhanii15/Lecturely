@@ -247,13 +247,13 @@ const Notes = () => {
 
   return (
     <div className="min-h-screen bg-surface-50">
-      <div className="flex items-center gap-2.5 px-6 py-3.5 border-b border-surface-100 bg-surface-50/80 backdrop-blur-xl sticky top-0 z-40">
-        <img src={logo} className="w-7 h-7" alt="Lecturely" />
-        <span className="text-base font-bold text-surface-800 tracking-tight">Lecturely</span>
+      <div className="flex items-center gap-2.5 px-4 md:px-6 py-3 border-b border-surface-100 bg-surface-50/80 backdrop-blur-xl sticky top-0 z-40">
+        <img src={logo} className="w-6 h-6 md:w-7 md:h-7" alt="Lecturely" />
+        <span className="text-sm md:text-base font-bold text-surface-800 tracking-tight">Lecturely</span>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 md:py-8">
+        <div className="flex items-center justify-between mb-6 md:mb-8 gap-2 flex-wrap">
           <button onClick={() => navigate('/dashboard')}
             className="flex items-center gap-2 text-sm font-medium text-surface-500 hover:text-surface-700 transition-colors cursor-pointer group">
             <div className="w-7 h-7 rounded-lg bg-surface-100 flex items-center justify-center group-hover:bg-surface-200 transition-colors">
@@ -283,18 +283,18 @@ const Notes = () => {
           </div>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
-              <FaBookOpen className="text-brand-500 text-sm" />
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 md:mb-10">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-brand-50 flex items-center justify-center shrink-0 mt-0.5">
+              <FaBookOpen className="text-brand-500 text-xs md:text-sm" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-surface-900">{lecture.title}</h1>
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-surface-900 break-words min-w-0">{lecture.title}</h1>
           </div>
         </motion.div>
 
         {isProcessing && (
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-            className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-8 text-center">
+            className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 md:p-8 text-center">
             <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto mb-5">
               <FaSpinner className="text-2xl text-amber-400 animate-spin" />
             </div>
