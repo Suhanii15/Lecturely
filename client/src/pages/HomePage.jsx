@@ -63,51 +63,9 @@ const HomePage = () => {
       
 
       {/* How It Works */}
-      <div id ="About" className="px-6 py-24 bg-surface-50">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-14"
-          >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-surface-100 text-surface-600 border border-surface-200 mb-4">
-              How it works
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-surface-900">Three simple steps</h2>
-            <p className="text-surface-500 mt-3 max-w-md mx-auto">From recording to notes in minutes.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {[
-              { img: upload, icon: Mic, title: "Upload Lecture", desc: "Upload your lecture recording or audio file in any common format.", delay: 0 },
-              { img: ai, icon: Brain, title: "AI Processing", desc: "Our AI transcribes and understands your lecture content with high accuracy.", delay: 0.15 },
-              { img: notes, icon: StickyNote, title: "Get Smart Notes", desc: "Receive clean notes, summaries, and key takeaways instantly.", delay: 0.3 },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                custom={item.delay}
-                variants={fadeUp}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true }}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                onClick={go}
-                className="bg-surface-100 rounded-2xl border border-surface-200 p-8 text-center shadow-sm hover:shadow-xl hover:shadow-brand-500/5 hover:border-brand-200/50 transition-all duration-300 cursor-pointer group"
-              >
-                <div className="w-16 h-16 mx-auto mb-5 rounded-xl bg-brand-50 flex items-center justify-center group-hover:bg-brand-100 group-hover:scale-105 transition-all duration-300">
-                  <item.icon className="text-xl text-brand-500" />
-                </div>
-                <div className="w-20 h-20 mx-auto mb-5 hidden">
-                  <img src={item.img} className="w-full h-full object-contain" alt={item.title} />
-                </div>
-                <h3 className="text-lg font-bold text-surface-800 mb-2">{item.title}</h3>
-                <p className="text-sm text-surface-500 leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
+      
+            
+                
       </section>
 
       

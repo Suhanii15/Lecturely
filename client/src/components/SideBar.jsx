@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { NavLink } from "react-router-dom"
 import SettingsModal from './SettingsModal'
-import { LayoutDashboard, CloudUpload, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, CloudUpload, Settings, LogOut, BookOpenCheck } from "lucide-react";
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from "../assets/Logo.png"
 
 const SideBar = () => {
   const [settings, setSettings] = useState(false);
@@ -25,7 +24,7 @@ const SideBar = () => {
     <aside className="w-56 min-h-screen bg-surface-50 border-r border-surface-100 px-3 py-6 flex flex-col gap-1 shrink-0">
       {/* Brand */}
       <div className="flex items-center gap-2.5 px-3 pb-5 mb-4 border-b border-surface-100">
-        <img src={logo} className="w-8 h-8" alt="Lecturely" />
+        <BookOpenCheck className="w-8 h-8 text-brand-500" />
         <span className="text-lg font-bold text-surface-800 tracking-tight">Lecturely</span>
       </div>
 
@@ -60,15 +59,7 @@ const SideBar = () => {
             </div>
           </div>
         )}
-        <div className="pt-4 border-t border-surface-100">
-          <button
-          onClick={() => { logoutUser(); navigate("/login"); }}
-          className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all duration-200 w-full text-left cursor-pointer"
-        >
-          <LogOut className="text-lg" />
-          Sign Out
-        </button>
-        </div>
+       
       </div>
 
       <SettingsModal isOpen={settings} onClose={() => setSettings(false)} />

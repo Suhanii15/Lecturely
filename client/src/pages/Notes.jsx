@@ -3,11 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft, FileText, Clock, Loader2, Info, Mic,
-  Lightbulb, List, Quote, BookOpen,
+  Lightbulb, List, Quote, BookOpen, BookOpenCheck,
   Download, Pencil, Save, X, Highlighter,
 } from 'lucide-react';
 import api from '../api';
-import logo from "../assets/Logo.png";
 
 const buildSegments = (text, highlights) => {
   if (!highlights?.length) return [{ text, highlighted: false }];
@@ -242,7 +241,7 @@ const Notes = () => {
   return (
     <div className="min-h-screen bg-surface-50">
       <div className="flex items-center gap-2.5 px-4 md:px-6 py-3 border-b border-surface-100 bg-surface-50/80 backdrop-blur-xl sticky top-0 z-40">
-        <img src={logo} className="w-6 h-6 md:w-7 md:h-7" alt="Lecturely" />
+        <BookOpenCheck className="w-6 h-6 md:w-7 md:h-7 text-brand-500" />
         <span className="text-sm md:text-base font-bold text-surface-800 tracking-tight">Lecturely</span>
       </div>
 

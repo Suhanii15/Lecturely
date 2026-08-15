@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Mic, FileText, CheckCircle, Clock, Loader2, ArrowRight, Trash2, Pencil, Check, X } from "lucide-react"
 
 const statusConfig = {
-  completed: { icon: CheckCircle, label: "Completed", classes: "bg-emerald-400 text-white " },
+  completed: { icon: CheckCircle, label: "Completed", classes: "bg-pink-200 text-white " },
   processing: { icon: Loader2, label: "Processing", classes: "bg-yellow text-white" },
   uploaded: { icon: Clock, label: "Awaiting", classes: "bg-sky-500 text-white" },
 };

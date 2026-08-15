@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../assets/Logo.png"
+import { BookOpenCheck } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between items-center bg-surface-50/80 backdrop-blur-xl sticky top-0 z-50 border-b border-surface-100/80 px-6 py-3.5">
       <div className="flex gap-2.5 items-center">
-        <img src={logo} className="w-9 h-9" alt="Lecturely" />
+        <BookOpenCheck className="w-9 h-9 text-brand-500" />
         <span className="text-surface-800 text-lg font-bold tracking-tight">Lecturely</span>
       </div>
 

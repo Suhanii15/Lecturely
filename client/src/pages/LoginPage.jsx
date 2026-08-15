@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Mail, Lock, Loader2, ArrowRight, Mic, Brain, StickyNote } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowRight, Mic, Brain, StickyNote, BookOpenCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
-import logo from "../assets/Logo.png"
 
 const LoginPage = () => {
   const { loginUser } = useContext(AuthContext);
@@ -43,44 +42,9 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-surface-50 flex">
-      {/* Brand panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-brand-700 relative overflow-hidden items-center justify-center">
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }} />
-        <div className="absolute top-0 left-0 w-72 h-72 bg-brand-400/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-300/10 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="relative z-10 text-center px-12"
-        >
-          <div className="w-20 h-20 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center mx-auto mb-8">
-            <img src={logo} className="w-12 h-12" alt="Lecturely" />
-          </div>
-          <h2 className="text-3xl font-bold text-white mb-4">Welcome to Lecturely</h2>
-          <p className="text-brand-200 text-base max-w-sm mx-auto leading-relaxed">
-            Upload your lectures and get AI-powered notes, summaries, and key points in seconds.
-          </p>
-          <div className="mt-10 flex flex-col gap-4 max-w-xs mx-auto">
-            {[
-              { icon: Mic, text: 'Upload any lecture recording' },
-              { icon: Brain, text: 'AI transcription & analysis' },
-              { icon: StickyNote, text: 'Get structured notes instantly' },
-            ].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 text-left">
-                <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
-                  <item.icon className="text-white/70 text-sm" />
-                </div>
-                <span className="text-sm text-brand-100">{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
+    
       {/* Form panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 border">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -89,7 +53,7 @@ const LoginPage = () => {
         >
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 lg:hidden">
-            <img src={logo} className="w-8 h-8" alt="Lecturely" />
+            <BookOpenCheck className="w-8 h-8 text-brand-500" />
             <span className="text-lg font-bold text-surface-800">Lecturely</span>
           </div>
 
@@ -106,7 +70,7 @@ const LoginPage = () => {
                 <label className="block text-sm font-medium text-surface-700 mb-1.5">Full Name</label>
                 <div className="relative">
                   <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                    placeholder="John Doe"
+                    placeholder="Enter Name"
                     className="w-full px-3.5 py-2.5 border border-surface-200 rounded-xl text-sm text-surface-900 bg-surface-50 placeholder-surface-400 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"
                     required />
                 </div>
@@ -117,7 +81,7 @@ const LoginPage = () => {
               <div className="relative">
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 text-sm pointer-events-none" />
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder="Enter Email"
                   className="w-full pl-10 pr-3.5 py-2.5 border border-surface-200 rounded-xl text-sm text-surface-900 bg-surface-50 placeholder-surface-400 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"
                   required />
               </div>
@@ -127,7 +91,7 @@ const LoginPage = () => {
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400 text-sm pointer-events-none" />
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter Password"
                   className="w-full pl-10 pr-3.5 py-2.5 border border-surface-200 rounded-xl text-sm text-surface-900 bg-surface-50 placeholder-surface-400 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"
                   required />
               </div>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import { Menu, BookOpenCheck } from 'lucide-react';
 import SideBar from './SideBar';
-import logo from "../assets/Logo.png";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,7 +20,7 @@ const Layout = ({ children }) => {
           <Menu className="text-surface-500 text-sm" />
         </button>
         <div className="flex items-center gap-2">
-          <img src={logo} className="w-7 h-7" alt="Lecturely" />
+          <BookOpenCheck className="w-7 h-7 text-brand-500" />
           <span className="text-base font-bold text-surface-800 tracking-tight">Lecturely</span>
         </div>
         <div className="w-9" />

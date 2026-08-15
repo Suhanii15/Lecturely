@@ -147,16 +147,16 @@ const SettingsModal = ({ isOpen, onClose }) => {
               </div>
 
               {/* Logout */}
-              <div className="flex items-center justify-between p-4 rounded-xl bg-red-500/5 border border-red-500/10">
+              <div className="flex items-center justify-between p-4 rounded-xl ">
                 <div className="flex items-center gap-3">
-                  <LogOut className="text-red-400" />
+                  <LogOut className="text-garay-400" />
                   <div>
-                    <p className="text-sm font-semibold text-red-600">Account</p>
-                    <p className="text-xs text-red-400">Sign out of your session</p>
+                    <p className="text-sm font-semibold text-gray-600">Account</p>
+                    <p className="text-xs text-gray-400">Sign out of your session</p>
                   </div>
                 </div>
                 <button onClick={handleLogout}
-                  className="text-xs font-bold text-red-500 border border-red-500/20 px-4 py-2 rounded-lg hover:bg-red-500/10 transition-all cursor-pointer">
+                  className="text-xs font-bold text-gray-500 border border-gray-500/20 px-4 py-2 rounded-lg hover:bg-gray-500/10 transition-all cursor-pointer">
                   Logout
                 </button>
               </div>

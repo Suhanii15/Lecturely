@@ -105,11 +105,10 @@ const Upload = () => {
   };
 
   return (
-    <div className="flex-1 min-w-0 p-4 md:p-8">
+    <div className="flex-1 min-w-0 p-4 md:p-8 mt-4">
       <div className="max-w-2xl w-full mx-auto">
         <div className="mb-5 md:mb-6">
           <h1 className="text-lg md:text-xl font-bold text-surface-900">Upload Lecture</h1>
-          <p className="text-sm text-surface-400 mt-0.5">Upload your lecture audio and let AI do the rest</p>
         </div>
 
         {/* Drop zone */}
@@ -118,9 +117,9 @@ const Upload = () => {
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className={`relative rounded-2xl border-2 border-dashed p-8 md:p-12 text-center transition-all duration-200 ${
+          className={`relative rounded-2xl border-2 border-dashed p-8 md:p-12 text-center transition-all duration-200 mt-12 ${
             dragOver
-              ? "border-brand-400 bg-brand-50/50 scale-[1.01]"
+              ? "border-gray-400 bg-brand-50/50 scale-[1.01]"
               : "border-surface-200 bg-surface-50/50 hover:border-surface-300"
           }`}
         >

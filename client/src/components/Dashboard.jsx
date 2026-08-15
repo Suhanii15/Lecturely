@@ -74,7 +74,7 @@ const Dashboard = () => {
   })();
 
   return (
-    <motion.div variants={container} initial="initial" animate="animate" className="flex-1 min-w-0 p-4 md:p-6 lg:p-8 xl:p-10 max-w-6xl w-full">
+    <motion.div variants={container} initial="initial" animate="animate" className="flex-1 min-w-0 p-4 md:p-6 lg:p-8 xl:p-10 max-w-6xl w-full mt-4">
 
       {/* Hero header */}
       <motion.div variants={fadeSlideUp} className="mb-6 md:mb-10">
@@ -84,15 +84,7 @@ const Dashboard = () => {
               {greeting}{user?.name ? `, ${user.name.split(' ')[0]}` : ''}
             </h1>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => navigate("/upload")}
-            className="bg-brand-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20 cursor-pointer flex items-center gap-2 shrink-0"
-          >
-            <Plus className="text-[10px]" />
-            New Upload
-          </motion.button>
+          
         </div>
       </motion.div>
 
@@ -135,11 +127,7 @@ const Dashboard = () => {
             <h3 className="text-lg font-bold text-surface-900 mb-1">
               {search ? "No results found" : "No lectures yet"}
             </h3>
-            <p className="text-sm text-surface-500 max-w-xs mx-auto">
-              {search
-                ? `No lectures match "${search}". Try a different search term.`
-                : "Upload your first lecture and let AI turn it into structured notes."}
-            </p>
+            
           </div>
         ) : (
           <div className="space-y-2 md:space-y-3">
