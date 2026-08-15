@@ -322,9 +322,7 @@ const Notes = () => {
                     <div key={idx}
                       className="bg-surface-100 rounded-2xl border border-surface-200 p-5 hover:border-surface-300 transition-all">
                       <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-brand-50 flex items-center justify-center shrink-0 mt-0.5">
-                          
-                        </div>
+                      
                         <div className="min-w-0 flex-1">
                           <h3 className="text-base font-bold text-surface-900 mb-1">{ch.headline || `Chapter ${idx + 1}`}</h3>
                           <p className="text-sm text-surface-600 leading-relaxed">{ch.summary}</p>

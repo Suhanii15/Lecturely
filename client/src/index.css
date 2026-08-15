@@ -4,16 +4,16 @@
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
   /* Brand */
-  --color-brand-50: #f8fcf5;
-  --color-brand-100: #f0f9ea;
-  --color-brand-200: #e5f5e0;
-  --color-brand-300: #c9ecbe;
-  --color-brand-400: #a4dd95;
-  --color-brand-500: #7cc76b;
-  --color-brand-600: #5aa649;
-  --color-brand-700: #47873b;
-  --color-brand-800: #396b30;
-  --color-brand-900: #2e5629;
+  --color-brand-50: #fffbf5;
+  --color-brand-100: #fff6ea;
+  --color-brand-200: #ffe9d0;
+  --color-brand-300: #ffd6a8;
+  --color-brand-400: #ffc07d;
+  --color-brand-500: #ffa75a;
+  --color-brand-600: #f78f3d;
+  --color-brand-700: #e07a24;
+  --color-brand-800: #bd6420;
+  --color-brand-900: #a0541b;
 
   /* Surfaces */
   --color-surface-50: #f7f5f0;
