@@ -53,7 +53,7 @@ const HomePage = () => {
               onClick={go}
               className="mt-8 bg-brand-600 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-brand-700 transition-colors shadow-xl shadow-brand-500/25 cursor-pointer text-base inline-flex items-center gap-2"
             >
-              Get Started Free
+              Get Started 
               <ArrowRight className="text-sm" />
             </motion.button>
 

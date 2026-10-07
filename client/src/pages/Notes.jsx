@@ -253,7 +253,7 @@ const Notes = () => {
             <div className="w-7 h-7 rounded-lg bg-surface-100 flex items-center justify-center group-hover:bg-surface-200 transition-colors">
               <ArrowLeft className="text-[10px]" />
             </div>
-            Back
+          
           </button>
           <div className="flex items-center gap-2">
             {isCompleted && (
@@ -389,7 +389,7 @@ const Notes = () => {
                       <div data-highlight-toolbar className="fixed z-50 transform -translate-x-1/2"
                         style={{ left: hlBarPos.x, top: hlBarPos.y }}>
                         <div className="bg-surface-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2">
-                          <button onClick={addHighlight}
+                          <button onMouseDown={(event) => event.preventDefault()} onClick={addHighlight}
                             className="flex items-center gap-1 hover:text-amber-300 transition-colors cursor-pointer">
                             <Highlighter className="text-[10px]" /> Highlight
                           </button>
