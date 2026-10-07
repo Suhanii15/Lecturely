@@ -79,6 +79,7 @@ const Notes = () => {
 
   useEffect(() => {
     const dismiss = (e) => {
+      if (e.target.closest?.('[data-highlight-toolbar]')) return;
       if (contentRef.current && !contentRef.current.contains(e.target)) {
         setShowHLBar(false);
         setSelRange(null);
@@ -385,7 +386,7 @@ const Notes = () => {
                     </div>
 
                     {showHLBar && selRange && (
-                      <div className="fixed z-50 transform -translate-x-1/2"
+                      <div data-highlight-toolbar className="fixed z-50 transform -translate-x-1/2"
                         style={{ left: hlBarPos.x, top: hlBarPos.y }}>
                         <div className="bg-surface-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2">
                           <button onClick={addHighlight}
